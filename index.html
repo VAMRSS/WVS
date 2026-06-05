@@ -262,18 +262,10 @@
     }
 
     textarea { min-height: 88px; resize: vertical; line-height: 1.65; }
-    .date-input {
-      appearance: none;
-      -webkit-appearance: none;
-      text-align: left;
-      font-size: 16px;
-      letter-spacing: 0.01em;
-      padding-right: 14px;
-      overflow: hidden;
-    }
     input:focus, textarea:focus, select:focus { border-color: var(--line-strong); background: rgba(255,255,255,0.86); }
 
     .form-grid { display: grid; gap: 12px; }
+    .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .dimension-grid input { text-align: center; font-variant-numeric: tabular-nums; }
     .mini-label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-align: center; text-transform: uppercase; }
@@ -337,9 +329,34 @@
     .empty { border: 1px dashed var(--line-strong); border-radius: 22px; padding: 22px; color: var(--sub); font-size: 13px; line-height: 1.75; text-align: center; }
     .hint { margin: 0 0 14px; color: var(--sub); font-size: 13px; line-height: 1.8; }
 
-    .setting-list { display: grid; gap: 12px; }
+    .setting-list { display: grid; gap: 8px; }
     .setting-group { border: 1px solid var(--line); border-radius: 22px; padding: 14px; background: rgba(255,255,255,0.72); }
     .setting-title { margin: 0 0 12px; font-weight: 800; letter-spacing: -0.02em; }
+    .setting-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 10px; }
+    .setting-form button { min-width: 78px; }
+    .setting-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 0;
+      border-top: 1px solid var(--line);
+      color: var(--sub);
+      font-size: 13px;
+    }
+    .setting-item:first-child { border-top: 0; }
+    .setting-item button {
+      min-height: 32px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(155,49,68,0.16);
+      background: rgba(155,49,68,0.07);
+      color: var(--danger);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
 
     .file-input-wrap input[type="file"] { min-height: 44px; padding: 10px; }
 
@@ -397,7 +414,7 @@
             <div class="kicker">Private artwork worksheet archive</div>
             <h1>Worksheet<br>Vault<span class="jp-note">作品台帳</span></h1>
           </div>
-          <p class="lead">Record work data, dimensions, completion date, exhibition history, and private price records. Export the vault as JSON anytime.<br>作品情報・寸法・完成日・展示履歴・内部価格を記録し、JSONで保存できます。</p>
+          <p class="lead">Record work data, dimensions, technique, location, exhibition history, sales price, and cost. Export the vault as JSON anytime.<br>作品情報・寸法・技法・保管場所・展示履歴・販売価格・原価を記録し、JSONで保存できます。</p>
         </header>
 
         <div class="accent-rule"></div>
@@ -458,7 +475,7 @@
             <div class="form-grid">
               <div class="field wide"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="例：WHO CURATED YOUR LUCK?" required></div>
               <div class="field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder="2026"></div>
-              <div class="field"><label for="completedDate">Completed / 完成日</label><input id="completedDate" class="date-input" type="text" inputmode="numeric" autocomplete="off" placeholder="YYYY/MM/DD" maxlength="10"></div>
+              <div class="field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
               <div class="field wide"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder="Serendipity"></div>
               <div class="field wide"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder="LED, acrylic, cable"></div>
               <div class="field wide">
@@ -469,10 +486,16 @@
                   <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder="100"></div>
                 </div>
               </div>
-              <div class="field"><label for="price">Private Price / 内部価格</label><input id="price" type="number" inputmode="numeric" min="0" placeholder="300000"></div>
+              <div class="field wide">
+                <label>Price / 価格</label>
+                <div class="price-grid">
+                  <div><div class="mini-label">販売価格</div><input id="price" type="number" inputmode="numeric" min="0" placeholder="300000"></div>
+                  <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder="120000"></div>
+                </div>
+              </div>
               <div class="field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
               <div class="field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
-              <div class="field"><label for="location">Location / 保管場所</label><input id="location" type="text" placeholder="Studio"></div>
+              <div class="field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
               <div class="field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder="Private collection"></div>
               <div class="field wide"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder="2026 Serendipity, Daikanyama"></textarea></div>
               <div class="field wide"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder="Notes"></textarea></div>
@@ -524,6 +547,31 @@
 
         <section class="section">
           <div class="section-head">
+            <div class="section-number">Options</div>
+            <h2>Vault Options<span class="jp-note">選択項目</span></h2>
+          </div>
+          <div class="setting-list">
+            <div class="setting-group">
+              <p class="setting-title">Technique / 技法</p>
+              <div class="setting-form">
+                <input id="techniqueOptionInput" type="text" placeholder="例：Painting">
+                <button class="secondary" type="button" id="addTechniqueButton">Add</button>
+              </div>
+              <div id="techniqueOptionList"></div>
+            </div>
+            <div class="setting-group">
+              <p class="setting-title">Location / 保管場所</p>
+              <div class="setting-form">
+                <input id="locationOptionInput" type="text" placeholder="例：Studio">
+                <button class="secondary" type="button" id="addLocationButton">Add</button>
+              </div>
+              <div id="locationOptionList"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-head">
             <div class="section-number">Danger</div>
             <h2>Reset Prototype<span class="jp-note">初期化</span></h2>
           </div>
@@ -542,6 +590,10 @@
 
   <script>
     const STORAGE_KEY = "vamrss-wsv-works-v1";
+    const TECHNIQUE_STORAGE_KEY = "vamrss-wsv-techniques-v1";
+    const LOCATION_STORAGE_KEY = "vamrss-wsv-locations-v1";
+    const DEFAULT_TECHNIQUES = ["Painting", "Sculpture", "Installation", "Drawing", "Photography", "Video", "Mixed Media"];
+    const DEFAULT_LOCATIONS = ["Studio", "Storage", "Gallery", "Collector", "Archive"];
     const PRODUCTION_STATUSES = ["制作中", "完成", "打ち切り"];
     const MANAGEMENT_STATUSES = ["展示中", "販売中", "売却済み", "非売品", "保管中", "貸出中", "手放し済み", "処分済み"];
     const LEGACY_STATUS_MAP = {
@@ -563,6 +615,8 @@
     const yen = new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY", maximumFractionDigits: 0 });
 
     let works = [];
+    let techniques = [];
+    let locations = [];
     let editingId = null;
     let activeStatus = "ALL";
 
@@ -570,6 +624,8 @@
     const workList = document.getElementById("workList");
     const productionStatusSelect = document.getElementById("productionStatus");
     const managementStatusSelect = document.getElementById("managementStatus");
+    const techniqueSelect = document.getElementById("technique");
+    const locationSelect = document.getElementById("location");
     const statusChips = document.getElementById("statusChips");
     const searchInput = document.getElementById("searchInput");
 
@@ -578,11 +634,12 @@
       year: document.getElementById("year"),
       series: document.getElementById("series"),
       materials: document.getElementById("materials"),
-      completedDate: document.getElementById("completedDate"),
+      technique: document.getElementById("technique"),
       sizeW: document.getElementById("sizeW"),
       sizeH: document.getElementById("sizeH"),
       sizeD: document.getElementById("sizeD"),
       price: document.getElementById("price"),
+      cost: document.getElementById("cost"),
       productionStatus: document.getElementById("productionStatus"),
       managementStatus: document.getElementById("managementStatus"),
       location: document.getElementById("location"),
@@ -608,6 +665,26 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(works));
     }
 
+    function cleanOptions(items, fallback) {
+      const source = Array.isArray(items) && items.length ? items : fallback;
+      return [...new Set(source.map(item => String(item || "").trim()).filter(Boolean))];
+    }
+
+    function loadSettings() {
+      try {
+        techniques = cleanOptions(JSON.parse(localStorage.getItem(TECHNIQUE_STORAGE_KEY)), DEFAULT_TECHNIQUES);
+      } catch { techniques = [...DEFAULT_TECHNIQUES]; }
+
+      try {
+        locations = cleanOptions(JSON.parse(localStorage.getItem(LOCATION_STORAGE_KEY)), DEFAULT_LOCATIONS);
+      } catch { locations = [...DEFAULT_LOCATIONS]; }
+    }
+
+    function saveSettings() {
+      localStorage.setItem(TECHNIQUE_STORAGE_KEY, JSON.stringify(techniques));
+      localStorage.setItem(LOCATION_STORAGE_KEY, JSON.stringify(locations));
+    }
+
     function seedIfEmpty() {
       if (works.length) return;
       works = [
@@ -616,12 +693,13 @@
           title: "WHO CURATED YOUR LUCK?",
           year: "2026",
           series: "Serendipity",
+          technique: "Installation",
           materials: "LED, acrylic, cable, base system",
           sizeW: "1500",
           sizeH: "800",
           sizeD: "100",
-          completedDate: "2026/04/28",
           price: "",
+          cost: "",
           productionStatus: "完成",
           managementStatus: "展示中",
           location: "Daikanyama / Gallery",
@@ -638,8 +716,51 @@
     function setupStatusOptions() {
       productionStatusSelect.innerHTML = PRODUCTION_STATUSES.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
       managementStatusSelect.innerHTML = MANAGEMENT_STATUSES.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+      renderCatalogSelect(techniqueSelect, techniques);
+      renderCatalogSelect(locationSelect, locations);
+      renderOptionLists();
       renderChips();
     }
+
+    function renderCatalogSelect(select, items, selected = "") {
+      const options = [...items];
+      if (selected && !options.includes(selected)) options.unshift(selected);
+      select.innerHTML = options.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+      if (selected) select.value = selected;
+    }
+
+    function renderOptionLists() {
+      renderOptionList("technique", techniques);
+      renderOptionList("location", locations);
+    }
+
+    function renderOptionList(kind, items) {
+      const target = document.getElementById(kind + "OptionList");
+      target.innerHTML = items.map(item => `
+        <div class="setting-item">
+          <span>${escapeHtml(item)}</span>
+          <button type="button" onclick="deleteOption('${kind}', '${escapeAttr(item)}')">Delete</button>
+        </div>
+      `).join("");
+    }
+
+    function addOption(kind) {
+      const input = document.getElementById(kind + "OptionInput");
+      const value = input.value.trim();
+      if (!value) return;
+      const list = kind === "technique" ? techniques : locations;
+      if (!list.includes(value)) list.push(value);
+      input.value = "";
+      saveSettings();
+      setupStatusOptions();
+    }
+
+    window.deleteOption = function(kind, value) {
+      if (kind === "technique") techniques = techniques.filter(item => item !== value);
+      if (kind === "location") locations = locations.filter(item => item !== value);
+      saveSettings();
+      setupStatusOptions();
+    };
 
     function renderChips() {
       const items = ["ALL", ...MANAGEMENT_STATUSES];
@@ -663,8 +784,12 @@
     function resetForm() {
       editingId = null;
       form.reset();
+      renderCatalogSelect(techniqueSelect, techniques);
+      renderCatalogSelect(locationSelect, locations);
+      fields.technique.value = techniques[0] || "";
       fields.productionStatus.value = "完成";
       fields.managementStatus.value = "保管中";
+      fields.location.value = locations[0] || "";
       document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
       document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
@@ -673,21 +798,23 @@
 
     function formToWork(existing = {}) {
       const price = fields.price.value === "" ? "" : Math.max(0, Math.round(Number(fields.price.value) || 0));
+      const cost = fields.cost.value === "" ? "" : Math.max(0, Math.round(Number(fields.cost.value) || 0));
       return {
         ...existing,
         id: existing.id || createId(),
         title: fields.title.value.trim(),
         year: fields.year.value.trim(),
         series: fields.series.value.trim(),
+        technique: fields.technique.value,
         materials: fields.materials.value.trim(),
-        completedDate: normalizeCompletedDate(fields.completedDate.value),
         sizeW: fields.sizeW.value.trim(),
         sizeH: fields.sizeH.value.trim(),
         sizeD: fields.sizeD.value.trim(),
         price,
+        cost,
         productionStatus: fields.productionStatus.value,
         managementStatus: fields.managementStatus.value,
-        location: fields.location.value.trim(),
+        location: fields.location.value,
         owner: fields.owner.value.trim(),
         exhibitionHistory: fields.exhibitionHistory.value.trim(),
         memo: fields.memo.value.trim(),
@@ -727,17 +854,18 @@
       fields.title.value = w.title || "";
       fields.year.value = w.year || "";
       fields.series.value = w.series || "";
+      renderCatalogSelect(techniqueSelect, techniques, w.technique || "");
       fields.materials.value = w.materials || "";
       const dims = normalizeDimensions(w);
-      fields.completedDate.value = normalizeCompletedDate(w.completedDate || "");
       fields.sizeW.value = dims.w;
       fields.sizeH.value = dims.h;
       fields.sizeD.value = dims.d;
       fields.price.value = w.price || "";
+      fields.cost.value = w.cost || "";
       const statuses = normalizeStatuses(w);
       fields.productionStatus.value = statuses.productionStatus;
       fields.managementStatus.value = statuses.managementStatus;
-      fields.location.value = w.location || "";
+      renderCatalogSelect(locationSelect, locations, w.location || "");
       fields.owner.value = w.owner || "";
       fields.exhibitionHistory.value = w.exhibitionHistory || "";
       fields.memo.value = w.memo || "";
@@ -773,10 +901,6 @@
       };
     }
 
-    function normalizeCompletedDate(value = "") {
-      return String(value).trim().replaceAll("-", "/").replaceAll(".", "/");
-    }
-
     function normalizeStatuses(w = {}) {
       const legacy = LEGACY_STATUS_MAP[w.status] || {};
       return {
@@ -794,6 +918,10 @@
       return parts.length ? `${parts.join(" × ")} mm` : String(w.size || "");
     }
 
+    function formatMoney(value) {
+      return value === "" || value == null ? "" : yen.format(Number(value) || 0);
+    }
+
     function render() {
       renderChips();
       const query = searchInput.value.trim().toLowerCase();
@@ -805,7 +933,7 @@
         .filter(w => {
           if (!query) return true;
           const statuses = normalizeStatuses(w);
-          return [w.title, w.year, w.completedDate, w.series, w.materials, formatDimensions(w), statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
+          return [w.title, w.year, w.series, w.technique, w.materials, formatDimensions(w), w.price, w.cost, statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
             .some(v => String(v || "").toLowerCase().includes(query));
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
@@ -821,19 +949,22 @@
 
       workList.innerHTML = '<div class="work-list">' + filtered.map(w => {
         const statuses = normalizeStatuses(w);
+        const priceParts = [];
+        if (w.price !== "" && w.price != null) priceParts.push(`Sales ${formatMoney(w.price)}`);
+        if (w.cost !== "" && w.cost != null) priceParts.push(`Cost ${formatMoney(w.cost)}`);
         return `
         <article class="work-item">
           <div class="work-top">
             <div>
-              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} ${w.completedDate ? `/ Completed ${escapeHtml(w.completedDate)}` : ""} / ${escapeHtml(w.series || "NO SERIES")}</div>
+              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}</div>
               <div class="work-title">${escapeHtml(w.title)}</div>
               <div class="chips">
                 <div class="status-pill">${escapeHtml(statuses.productionStatus)}</div>
                 <div class="status-pill">${escapeHtml(statuses.managementStatus)}</div>
               </div>
               <div class="work-meta">
-                ${escapeHtml(w.materials || "No materials")}<br>
-                ${escapeHtml(formatDimensions(w) || "No size")} / ${escapeHtml(w.location || "No location")}
+                ${escapeHtml(w.technique || "No technique")} / ${escapeHtml(w.materials || "No materials")}<br>
+                ${escapeHtml(formatDimensions(w) || "No size")} / ${escapeHtml(w.location || "No location")}${priceParts.length ? `<br>${escapeHtml(priceParts.join(" / "))}` : ""}
               </div>
             </div>
           </div>
@@ -849,6 +980,19 @@
     }
 
     searchInput.addEventListener("input", render);
+
+    document.getElementById("addTechniqueButton").addEventListener("click", () => addOption("technique"));
+    document.getElementById("addLocationButton").addEventListener("click", () => addOption("location"));
+    document.getElementById("techniqueOptionInput").addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      addOption("technique");
+    });
+    document.getElementById("locationOptionInput").addEventListener("keydown", event => {
+      if (event.key !== "Enter") return;
+      event.preventDefault();
+      addOption("location");
+    });
 
     document.getElementById("exportButton").addEventListener("click", () => {
       const backup = {
@@ -884,12 +1028,13 @@
             title: String(w.title || "Untitled"),
             year: String(w.year || ""),
             series: String(w.series || ""),
+            technique: String(w.technique || ""),
             materials: String(w.materials || ""),
-            completedDate: normalizeCompletedDate(w.completedDate || ""),
             sizeW: normalizeDimensions(w).w,
             sizeH: normalizeDimensions(w).h,
             sizeD: normalizeDimensions(w).d,
             price: w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0)),
+            cost: w.cost === "" || w.cost == null ? "" : Math.max(0, Math.round(Number(w.cost) || 0)),
             productionStatus: normalizeStatuses(w).productionStatus,
             managementStatus: normalizeStatuses(w).managementStatus,
             location: String(w.location || ""),
@@ -899,7 +1044,11 @@
             createdAt: w.createdAt || nowIso(),
             updatedAt: w.updatedAt || nowIso()
           }));
+          techniques = cleanOptions([...techniques, ...works.map(w => w.technique)], DEFAULT_TECHNIQUES);
+          locations = cleanOptions([...locations, ...works.map(w => w.location)], DEFAULT_LOCATIONS);
+          saveSettings();
           save();
+          setupStatusOptions();
           resetForm();
           render();
           showScreen("vault");
@@ -935,6 +1084,7 @@
     function escapeAttr(text) { return escapeHtml(text).replaceAll("`", "&#096;"); }
 
     load();
+    loadSettings();
     seedIfEmpty();
     setupStatusOptions();
     resetForm();

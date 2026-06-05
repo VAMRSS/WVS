@@ -150,7 +150,7 @@
     }
 
     .status-section {
-      padding: 24px 26px 24px;
+      padding: 22px 26px 16px;
       border-color: rgba(20,32,51,0.16);
       background:
         radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 36%),
@@ -161,8 +161,8 @@
 
     .section-head {
       display: grid;
-      gap: 3px;
-      margin-bottom: 4px;
+      gap: 0;
+      margin-bottom: 0;
     }
 
     .section-number, .label {
@@ -174,6 +174,12 @@
       color: rgba(255,255,255,0.58);
     }
 
+    .status-section h2,
+    .status-section .section-number,
+    .status-section .jp-note {
+      line-height: 0.95;
+    }
+
     .overview-grid {
       display: grid;
       color: inherit;
@@ -183,10 +189,10 @@
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: 1fr auto;
-      gap: 2px;
+      gap: 0;
       align-items: stretch;
-      min-height: 174px;
-      padding: 0 2px 2px;
+      min-height: 118px;
+      padding: 0 2px;
       text-align: left;
     }
 
@@ -197,7 +203,7 @@
       justify-self: stretch;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-size: clamp(120px, 31vw, 172px);
-      line-height: 0.74;
+      line-height: 0.68;
       font-weight: 500;
       letter-spacing: -0.08em;
       font-variant-numeric: tabular-nums;
@@ -341,7 +347,7 @@
       .container { padding-top: 28px; }
       .hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
       .overview-grid { grid-template-columns: 1fr; }
-      .stat { min-height: 198px; }
+      .stat { min-height: 142px; }
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid .wide { grid-column: 1 / -1; }
       .button-row { grid-template-columns: 1fr auto; }

@@ -3,20 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>(VAMRSS)WORKSHEET VAULT SYSTEM / WSV v0.2</title>
+  <title>(VAMRSS)WORKSHEET VAULT SYSTEM / WSV v1.0</title>
   <style>
     :root {
+      /* Base */
       --bg: #f6f8fb;
       --surface: #ffffff;
       --surface-soft: #f1f5f9;
+      --surface-cool: #eef3f8;
+
+      /* Text */
       --ink: #101722;
       --sub: #607084;
       --muted: #9aa8b8;
+
+      /* Structure */
       --line: #dfe7ef;
       --line-strong: #b8c7d8;
-      --deep: #142033;
-      --deep-2: #203149;
+
+      /* Emphasis / Deep Green Archive */
+      --deep: #071c16;
+      --deep-2: #102a22;
+      --deep-soft: #17372d;
+      --action: #102a22;
+
+      /* Danger */
       --danger: #9b3144;
+
+      /* Shape */
       --radius: 28px;
       --radius-small: 18px;
       --shadow: 0 18px 50px rgba(15, 30, 48, 0.07);
@@ -36,9 +50,10 @@
     }
 
     button, input, textarea, select { font: inherit; }
-    button { -webkit-tap-highlight-color: transparent; }
+    button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+    button:disabled { opacity: 0.48; cursor: not-allowed; }
 
-    .container {
+    .container, .vam-container {
       width: min(760px, calc(100% - 24px));
       margin: 0 auto;
       padding: max(18px, env(safe-area-inset-top)) 0 calc(var(--nav-height) + max(24px, env(safe-area-inset-bottom)));
@@ -46,33 +61,35 @@
 
     .screen { display: none; }
     .screen.active { display: block; }
-    .page { display: grid; gap: 16px; }
+    .page, .vam-page { display: grid; gap: 16px; }
 
-    .topbar {
+    .topbar, .vam-topbar {
       display: grid;
-      grid-template-columns: 1fr auto auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
       align-items: center;
       gap: 8px;
       min-height: 44px;
     }
 
-    .brand, .top-title, .top-action, .section-number, .label, .nav-button, .chip, .status-pill {
+    .brand, .top-title, .top-action, .section-number, .label, .nav-button, .chip, .status-pill,
+    .vam-brand, .vam-top-title, .vam-top-action, .vam-section-code, .vam-label, .vam-nav-button,
+    .vam-chip, .vam-status-pill {
       font-size: 10px;
       font-weight: 800;
       letter-spacing: 0.09em;
       text-transform: uppercase;
     }
 
-    .brand {
+    .brand, .vam-brand {
       color: var(--sub);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .top-title { color: var(--muted); }
+    .top-title, .vam-top-title { color: var(--muted); }
 
-    .top-action {
+    .top-action, .vam-top-action {
       border: 1px solid var(--line);
       background: rgba(255,255,255,0.82);
       color: var(--ink);
@@ -81,7 +98,7 @@
       border-radius: 999px;
     }
 
-    .hero {
+    .hero, .vam-hero {
       display: grid;
       gap: 18px;
       padding: 24px;
@@ -92,7 +109,7 @@
       overflow: hidden;
     }
 
-    .kicker {
+    .kicker, .vam-kicker {
       margin-bottom: 12px;
       color: var(--sub);
       font-size: 12px;
@@ -100,7 +117,7 @@
       letter-spacing: 0.03em;
     }
 
-    h1 {
+    h1, .vam-title {
       margin: 0;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-weight: 500;
@@ -109,7 +126,7 @@
       letter-spacing: -0.08em;
     }
 
-    h2 {
+    h2, .vam-section-title {
       margin: 0;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-weight: 500;
@@ -118,7 +135,7 @@
       letter-spacing: -0.06em;
     }
 
-    .jp-note {
+    .jp-note, .vam-note {
       display: inline-block;
       margin-left: 8px;
       color: var(--muted);
@@ -129,19 +146,19 @@
       vertical-align: middle;
     }
 
-    .lead {
+    .lead, .vam-lead {
       margin: 0;
       color: var(--sub);
       font-size: 13px;
       line-height: 1.85;
     }
 
-    .accent-rule {
+    .accent-rule, .vam-rule {
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
     }
 
-    .section {
+    .section, .vam-section {
       padding: 18px;
       border: 0.5px solid var(--line);
       border-radius: var(--radius);
@@ -149,39 +166,37 @@
       box-shadow: 0 8px 22px rgba(15,30,48,0.035);
     }
 
-    .status-section {
+    .section-soft {
+      background: rgba(241,245,249,0.76);
+    }
+
+    .status-section, .emphasis-section, .vam-section-emphasis {
       padding: 22px 26px 16px;
-      border-color: rgba(20,32,51,0.16);
+      border-color: rgba(7, 28, 22, 0.24);
       background:
         radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 36%),
         linear-gradient(135deg, var(--deep), var(--deep-2));
       color: var(--surface);
-      box-shadow: 0 18px 46px rgba(12, 21, 31, 0.13);
+      box-shadow: 0 18px 46px rgba(7, 28, 22, 0.18);
     }
 
-    .section-head {
+    .section-head, .vam-section-head {
       display: grid;
       gap: 5px;
       margin-bottom: 18px;
     }
 
-    .section-number, .label {
-      color: var(--muted);
-    }
-
+    .section-number, .label, .vam-section-code, .vam-label { color: var(--muted); }
     .status-section .section-number,
-    .status-section .jp-note {
+    .status-section .jp-note,
+    .emphasis-section .section-number,
+    .emphasis-section .jp-note {
       color: rgba(255,255,255,0.58);
     }
 
-    .overview-grid {
-      display: grid;
-      gap: 0;
-      margin-top: 0;
-      color: inherit;
-    }
+    .overview-grid { display: grid; gap: 0; margin-top: 0; color: inherit; }
 
-    .stat {
+    .stat, .vam-stat {
       display: grid;
       gap: 10px;
       padding: 16px 0;
@@ -189,7 +204,7 @@
       text-align: left;
     }
 
-    .stat span {
+    .stat span, .stat-row span {
       color: rgba(255,255,255,0.62);
       font-size: 11px;
       font-weight: 800;
@@ -208,23 +223,13 @@
       letter-spacing: -0.08em;
     }
 
-    .stat-row {
+    .stat-row, .vam-stat-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 16px;
       padding: 13px 0;
       border-top: 1px solid rgba(255,255,255,0.16);
-    }
-
-    .stat-row span {
-      color: rgba(255,255,255,0.62);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      line-height: 1.35;
-      text-align: left;
-      text-transform: uppercase;
     }
 
     .stat-row strong {
@@ -238,9 +243,9 @@
     }
 
     form { display: grid; gap: 12px; }
-    .field { display: grid; gap: 7px; }
+    .field, .vam-field { display: grid; gap: 7px; }
 
-    label {
+    label, .vam-label {
       color: var(--sub);
       font-size: 11px;
       font-weight: 800;
@@ -248,7 +253,7 @@
       text-transform: uppercase;
     }
 
-    input, textarea, select {
+    input, textarea, select, .vam-input, .vam-textarea, .vam-select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-small);
@@ -262,16 +267,29 @@
     }
 
     textarea { min-height: 88px; resize: vertical; line-height: 1.65; }
-    input:focus, textarea:focus, select:focus { border-color: var(--line-strong); background: rgba(255,255,255,0.86); }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--line-strong);
+      background: rgba(255,255,255,0.86);
+    }
 
     .form-grid { display: grid; gap: 12px; }
     .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
     .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .dimension-grid input { text-align: center; font-variant-numeric: tabular-nums; }
-    .mini-label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: 0.08em; text-align: center; text-transform: uppercase; }
+
+    .mini-label {
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
     .button-row { display: grid; gap: 10px; }
 
-    button.primary, button.secondary, button.danger {
+    button.primary, button.secondary, button.danger,
+    .vam-button, .vam-button-primary, .vam-button-secondary, .vam-button-danger {
       min-height: 48px;
       border-radius: 999px;
       padding: 0 16px;
@@ -282,15 +300,15 @@
       text-transform: uppercase;
     }
 
-    button.primary { background: var(--deep); color: var(--surface); border-color: var(--deep); }
-    button.secondary { background: rgba(255,255,255,0.72); color: var(--ink); }
-    button.danger { background: rgba(155,49,68,0.07); color: var(--danger); border-color: rgba(155,49,68,0.16); }
+    button.primary, .vam-button-primary { background: var(--action); color: var(--surface); border-color: var(--action); }
+    button.secondary, .vam-button-secondary { background: rgba(255,255,255,0.72); color: var(--ink); }
+    button.danger, .vam-button-danger { background: rgba(155,49,68,0.07); color: var(--danger); border-color: rgba(155,49,68,0.16); }
 
     .toolbar { display: grid; gap: 10px; margin-bottom: 14px; }
     .toolbar-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
 
     .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip {
+    .chip, .vam-chip {
       border: 1px solid var(--line);
       border-radius: 999px;
       background: rgba(255,255,255,0.74);
@@ -298,10 +316,10 @@
       min-height: 34px;
       padding: 0 12px;
     }
-    .chip.active { background: var(--deep); color: var(--surface); border-color: var(--deep); }
+    .chip.active, .vam-chip-active { background: var(--action); color: var(--surface); border-color: var(--action); }
 
     .work-list { display: grid; gap: 12px; }
-    .work-item {
+    .work-item, .vam-work-card {
       border: 1px solid var(--line);
       border-radius: 22px;
       background: rgba(255,255,255,0.78);
@@ -312,7 +330,8 @@
     .work-date { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
     .work-title { margin-top: 4px; font-size: 20px; font-weight: 700; letter-spacing: -0.04em; }
     .work-meta { margin-top: 5px; color: var(--sub); font-size: 12px; line-height: 1.65; }
-    .status-pill {
+
+    .status-pill, .vam-status-pill {
       display: inline-flex;
       align-items: center;
       min-height: 28px;
@@ -360,7 +379,7 @@
 
     .file-input-wrap input[type="file"] { min-height: 44px; padding: 10px; }
 
-    .bottom-nav {
+    .bottom-nav, .vam-bottom-nav {
       position: fixed;
       left: 50%;
       bottom: max(10px, env(safe-area-inset-bottom));
@@ -379,67 +398,66 @@
       z-index: 10;
     }
 
-    .nav-button {
+    .nav-button, .vam-nav-button {
       border: 0;
       background: transparent;
       color: var(--sub);
       min-height: 46px;
       border-radius: 999px;
     }
-    .nav-button.active { background: #edf3f8; color: var(--ink); }
+    .nav-button.active, .vam-nav-button-active { background: #edf3f8; color: var(--ink); }
 
     @media (min-width: 640px) {
-      .container { padding-top: 28px; }
-      .hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
+      .container, .vam-container { padding-top: 28px; }
+      .hero, .vam-hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid .wide { grid-column: 1 / -1; }
       .button-row { grid-template-columns: 1fr auto; }
       .toolbar-row { grid-template-columns: 1fr auto; }
-      .work-top { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <main class="container">
+  <main class="container vam-container">
     <section id="vaultScreen" class="screen active">
-      <div class="page">
-        <div class="topbar">
-          <div class="brand">＊ (VAMRSS) WSV</div>
-          <div class="top-title">WORKS VAULT</div>
-          <button class="top-action" type="button" onclick="showScreen('data')">DATA</button>
+      <div class="page vam-page">
+        <div class="topbar vam-topbar">
+          <div class="brand vam-brand">＊ (VAMRSS) WSV</div>
+          <div class="top-title vam-top-title">WORKS VAULT</div>
+          <button class="top-action vam-top-action" type="button" onclick="showScreen('data')">DATA</button>
         </div>
 
-        <header class="hero">
+        <header class="hero vam-hero">
           <div class="hero-main">
-            <div class="kicker">Private artwork worksheet archive</div>
-            <h1>Worksheet<br>Vault<span class="jp-note">作品台帳</span></h1>
+            <div class="kicker vam-kicker">Private artwork worksheet archive</div>
+            <h1 class="vam-title">Worksheet<br>Vault<span class="jp-note vam-note">作品台帳</span></h1>
           </div>
-          <p class="lead">Record work data, dimensions, technique, location, exhibition history, sales price, and cost. Export the vault as JSON anytime.<br>作品情報・寸法・技法・保管場所・展示履歴・販売価格・原価を記録し、JSONで保存できます。</p>
+          <p class="lead vam-lead">Record, organize, and preserve artwork data in a quiet private archive.<br>作品情報・寸法・技法・保管場所・展示履歴を記録し、JSONで保管できます。</p>
         </header>
 
-        <div class="accent-rule"></div>
+        <div class="accent-rule vam-rule"></div>
 
-        <section class="section status-section">
-          <div class="section-head">
-            <div class="section-number">Overview</div>
-            <h2>Works Summary<span class="jp-note">作品数</span></h2>
+        <section class="section status-section vam-section vam-section-emphasis">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Overview</div>
+            <h2 class="vam-section-title">Works Summary<span class="jp-note vam-note">作品数</span></h2>
           </div>
           <div class="overview-grid">
-            <div class="stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
-            <div class="stat-row"><span>In Progress / 進行中</span><strong id="productionWorks">0</strong></div>
-            <div class="stat-row"><span>Stored / 保管中</span><strong id="storedWorks">0</strong></div>
+            <div class="stat vam-stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
+            <div class="stat-row vam-stat-row"><span>In Progress / 進行中</span><strong id="productionWorks">0</strong></div>
+            <div class="stat-row vam-stat-row"><span>Stored / 保管中</span><strong id="storedWorks">0</strong></div>
           </div>
         </section>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Search</div>
-            <h2>Search Vault<span class="jp-note">検索</span></h2>
+        <section class="section vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Index</div>
+            <h2 class="vam-section-title">Search Vault<span class="jp-note vam-note">検索</span></h2>
           </div>
           <div class="toolbar">
             <div class="toolbar-row">
-              <input id="searchInput" type="search" placeholder="Search works">
-              <button class="secondary" type="button" onclick="showScreen('entry')">+ Add Work</button>
+              <input id="searchInput" type="search" placeholder="Search title, series, location">
+              <button class="secondary vam-button-secondary" type="button" onclick="showScreen('entry')">+ Add Work</button>
             </div>
             <div class="chips" id="statusChips"></div>
           </div>
@@ -449,36 +467,37 @@
     </section>
 
     <section id="entryScreen" class="screen">
-      <div class="page">
-        <div class="topbar">
-          <div class="brand">＊ NEW RECORD</div>
-          <div class="top-title">WORKSHEET</div>
-          <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
+      <div class="page vam-page">
+        <div class="topbar vam-topbar">
+          <div class="brand vam-brand">＊ NEW RECORD</div>
+          <div class="top-title vam-top-title">WORKSHEET</div>
+          <button class="top-action vam-top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
-        <header class="hero">
+        <header class="hero vam-hero">
           <div class="hero-main">
-            <div class="kicker">Create or edit one worksheet record</div>
-            <h1 id="entryHeroTitle">New<br>Work<span class="jp-note">作品登録</span></h1>
+            <div class="kicker vam-kicker">Create or edit one worksheet record</div>
+            <h1 id="entryHeroTitle" class="vam-title">New<br>Work<span class="jp-note vam-note">作品登録</span></h1>
           </div>
-          <p class="lead">This prototype stores data in this browser. Use Export Vault regularly to keep a JSON backup.<br>このプロトタイプはブラウザ内に保存します。定期的にJSONを書き出してください。</p>
+          <p class="lead vam-lead">This prototype stores records in this browser. Export the vault regularly as a JSON backup.<br>このプロトタイプはブラウザ内に保存します。定期的にJSONを書き出してください。</p>
         </header>
 
-        <div class="accent-rule"></div>
+        <div class="accent-rule vam-rule"></div>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Entry</div>
-            <h2 id="formTitle">Work Record<span class="jp-note">作品情報</span></h2>
+        <section class="section vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Entry</div>
+            <h2 id="formTitle" class="vam-section-title">Work Record<span class="jp-note vam-note">作品情報</span></h2>
           </div>
           <form id="workForm">
             <div class="form-grid">
-              <div class="field wide"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="例：WHO CURATED YOUR LUCK?" required></div>
-              <div class="field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder="2026"></div>
-              <div class="field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
-              <div class="field wide"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder="Serendipity"></div>
-              <div class="field wide"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder="LED, acrylic, cable"></div>
-              <div class="field wide">
+              <div class="field wide vam-field"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="例：WHO CURATED YOUR LUCK?" required></div>
+              <div class="field vam-field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder="2026"></div>
+              <div class="field vam-field"><label for="completedDate">Completed / 完成日</label><input id="completedDate" type="date"></div>
+              <div class="field vam-field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
+              <div class="field wide vam-field"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder="Serendipity"></div>
+              <div class="field wide vam-field"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder="LED, acrylic, cable"></div>
+              <div class="field wide vam-field">
                 <label>Dimensions / サイズ mm</label>
                 <div class="dimension-grid">
                   <div><div class="mini-label">W</div><input id="sizeW" type="number" inputmode="numeric" min="0" placeholder="1500"></div>
@@ -486,23 +505,23 @@
                   <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder="100"></div>
                 </div>
               </div>
-              <div class="field wide">
-                <label>Price / 価格</label>
+              <div class="field wide vam-field">
+                <label>Ledger / 価格記録</label>
                 <div class="price-grid">
                   <div><div class="mini-label">販売価格</div><input id="price" type="number" inputmode="numeric" min="0" placeholder="300000"></div>
                   <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder="120000"></div>
                 </div>
               </div>
-              <div class="field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
-              <div class="field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
-              <div class="field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
-              <div class="field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder="Private collection"></div>
-              <div class="field wide"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder="2026 Serendipity, Daikanyama"></textarea></div>
-              <div class="field wide"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder="Notes"></textarea></div>
+              <div class="field vam-field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
+              <div class="field vam-field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
+              <div class="field vam-field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
+              <div class="field vam-field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder="Private collection"></div>
+              <div class="field wide vam-field"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder="2026 Serendipity, Daikanyama"></textarea></div>
+              <div class="field wide vam-field"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder="Notes"></textarea></div>
             </div>
             <div class="button-row">
-              <button class="primary" type="submit" id="submitButton">Save Record</button>
-              <button class="secondary" type="button" id="cancelButton" style="display:none;">Cancel Edit</button>
+              <button class="primary vam-button-primary" type="submit" id="submitButton">Save Record</button>
+              <button class="secondary vam-button-secondary" type="button" id="cancelButton" style="display:none;">Cancel Edit</button>
             </div>
           </form>
         </section>
@@ -510,52 +529,52 @@
     </section>
 
     <section id="dataScreen" class="screen">
-      <div class="page">
-        <div class="topbar">
-          <div class="brand">＊ DATA ROOM</div>
-          <div class="top-title">IMPORT / EXPORT</div>
-          <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
+      <div class="page vam-page">
+        <div class="topbar vam-topbar">
+          <div class="brand vam-brand">＊ DATA ROOM</div>
+          <div class="top-title vam-top-title">IMPORT / EXPORT</div>
+          <button class="top-action vam-top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
-        <header class="hero">
+        <header class="hero vam-hero">
           <div class="hero-main">
-            <div class="kicker">JSON backup and restore</div>
-            <h1>Data<br>Room<span class="jp-note">保管庫管理</span></h1>
+            <div class="kicker vam-kicker">JSON backup and restore</div>
+            <h1 class="vam-title">Data<br>Room<span class="jp-note vam-note">保管庫管理</span></h1>
           </div>
-          <p class="lead">Export all records as a JSON file. Import will replace the current vault after confirmation.<br>全作品データをJSONで保存できます。インポートは確認後、現在のデータを置き換えます。</p>
+          <p class="lead vam-lead">Export all records as a JSON file. Import will replace the current vault after confirmation.<br>全作品データをJSONで保存できます。インポートは確認後、現在のデータを置き換えます。</p>
         </header>
 
-        <div class="accent-rule"></div>
+        <div class="accent-rule vam-rule"></div>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Export</div>
-            <h2>Export Vault<span class="jp-note">書き出し</span></h2>
+        <section class="section vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Export</div>
+            <h2 class="vam-section-title">Export Vault<span class="jp-note vam-note">書き出し</span></h2>
           </div>
           <p class="hint">現在の作品データを <strong>wsv-backup-日付.json</strong> として保存します。</p>
-          <button class="primary" type="button" id="exportButton" style="width:100%;">Export Vault</button>
+          <button class="primary vam-button-primary" type="button" id="exportButton" style="width:100%;">Export Vault</button>
         </section>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Import</div>
-            <h2>Import Vault<span class="jp-note">読み込み</span></h2>
+        <section class="section vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Import</div>
+            <h2 class="vam-section-title">Import Vault<span class="jp-note vam-note">読み込み</span></h2>
           </div>
           <p class="hint">エクスポートしたJSONを読み込みます。現在のデータは上書きされます。</p>
-          <div class="field file-input-wrap"><label for="importFile">JSON File / バックアップファイル</label><input id="importFile" type="file" accept="application/json,.json"></div>
+          <div class="field file-input-wrap vam-field"><label for="importFile">JSON File / バックアップファイル</label><input id="importFile" type="file" accept="application/json,.json"></div>
         </section>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Options</div>
-            <h2>Vault Options<span class="jp-note">選択項目</span></h2>
+        <section class="section section-soft vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Options</div>
+            <h2 class="vam-section-title">Vault Options<span class="jp-note vam-note">選択項目</span></h2>
           </div>
           <div class="setting-list">
             <div class="setting-group">
               <p class="setting-title">Technique / 技法</p>
               <div class="setting-form">
                 <input id="techniqueOptionInput" type="text" placeholder="例：Painting">
-                <button class="secondary" type="button" id="addTechniqueButton">Add</button>
+                <button class="secondary vam-button-secondary" type="button" id="addTechniqueButton">Add</button>
               </div>
               <div id="techniqueOptionList"></div>
             </div>
@@ -563,29 +582,29 @@
               <p class="setting-title">Location / 保管場所</p>
               <div class="setting-form">
                 <input id="locationOptionInput" type="text" placeholder="例：Studio">
-                <button class="secondary" type="button" id="addLocationButton">Add</button>
+                <button class="secondary vam-button-secondary" type="button" id="addLocationButton">Add</button>
               </div>
               <div id="locationOptionList"></div>
             </div>
           </div>
         </section>
 
-        <section class="section">
-          <div class="section-head">
-            <div class="section-number">Danger</div>
-            <h2>Reset Prototype<span class="jp-note">初期化</span></h2>
+        <section class="section vam-section">
+          <div class="section-head vam-section-head">
+            <div class="section-number vam-section-code">Danger</div>
+            <h2 class="vam-section-title">Reset Prototype<span class="jp-note vam-note">初期化</span></h2>
           </div>
           <p class="hint">ブラウザ内のWSVプロトタイプデータを削除します。必要な場合は先にエクスポートしてください。</p>
-          <button class="danger" type="button" id="resetButton" style="width:100%;">Delete All Records</button>
+          <button class="danger vam-button-danger" type="button" id="resetButton" style="width:100%;">Delete All Records</button>
         </section>
       </div>
     </section>
   </main>
 
-  <nav class="bottom-nav">
-    <button class="nav-button active" type="button" id="vaultNavButton" onclick="showScreen('vault')">VAULT</button>
-    <button class="nav-button" type="button" id="entryNavButton" onclick="showScreen('entry')">ENTRY</button>
-    <button class="nav-button" type="button" id="dataNavButton" onclick="showScreen('data')">DATA</button>
+  <nav class="bottom-nav vam-bottom-nav">
+    <button class="nav-button active vam-nav-button vam-nav-button-active" type="button" id="vaultNavButton" onclick="showScreen('vault')">VAULT</button>
+    <button class="nav-button vam-nav-button" type="button" id="entryNavButton" onclick="showScreen('entry')">ENTRY</button>
+    <button class="nav-button vam-nav-button" type="button" id="dataNavButton" onclick="showScreen('data')">DATA</button>
   </nav>
 
   <script>
@@ -632,6 +651,7 @@
     const fields = {
       title: document.getElementById("title"),
       year: document.getElementById("year"),
+      completedDate: document.getElementById("completedDate"),
       series: document.getElementById("series"),
       materials: document.getElementById("materials"),
       technique: document.getElementById("technique"),
@@ -661,9 +681,7 @@
       } catch { works = []; }
     }
 
-    function save() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(works));
-    }
+    function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(works)); }
 
     function cleanOptions(items, fallback) {
       const source = Array.isArray(items) && items.length ? items : fallback;
@@ -671,13 +689,11 @@
     }
 
     function loadSettings() {
-      try {
-        techniques = cleanOptions(JSON.parse(localStorage.getItem(TECHNIQUE_STORAGE_KEY)), DEFAULT_TECHNIQUES);
-      } catch { techniques = [...DEFAULT_TECHNIQUES]; }
+      try { techniques = cleanOptions(JSON.parse(localStorage.getItem(TECHNIQUE_STORAGE_KEY)), DEFAULT_TECHNIQUES); }
+      catch { techniques = [...DEFAULT_TECHNIQUES]; }
 
-      try {
-        locations = cleanOptions(JSON.parse(localStorage.getItem(LOCATION_STORAGE_KEY)), DEFAULT_LOCATIONS);
-      } catch { locations = [...DEFAULT_LOCATIONS]; }
+      try { locations = cleanOptions(JSON.parse(localStorage.getItem(LOCATION_STORAGE_KEY)), DEFAULT_LOCATIONS); }
+      catch { locations = [...DEFAULT_LOCATIONS]; }
     }
 
     function saveSettings() {
@@ -687,29 +703,28 @@
 
     function seedIfEmpty() {
       if (works.length) return;
-      works = [
-        {
-          id: createId(),
-          title: "WHO CURATED YOUR LUCK?",
-          year: "2026",
-          series: "Serendipity",
-          technique: "Installation",
-          materials: "LED, acrylic, cable, base system",
-          sizeW: "1500",
-          sizeH: "800",
-          sizeD: "100",
-          price: "",
-          cost: "",
-          productionStatus: "完成",
-          managementStatus: "展示中",
-          location: "Daikanyama / Gallery",
-          owner: "",
-          exhibitionHistory: "2026 Serendipity / Daikanyama",
-          memo: "大型LEDネオン風サイン作品。プロトタイプ用のサンプルレコードです。",
-          createdAt: nowIso(),
-          updatedAt: nowIso()
-        }
-      ];
+      works = [{
+        id: createId(),
+        title: "WHO CURATED YOUR LUCK?",
+        year: "2026",
+        completedDate: "2026-04-28",
+        series: "Serendipity",
+        technique: "Installation",
+        materials: "LED, acrylic, cable, base system",
+        sizeW: "1500",
+        sizeH: "800",
+        sizeD: "100",
+        price: "",
+        cost: "",
+        productionStatus: "完成",
+        managementStatus: "展示中",
+        location: "Daikanyama / Gallery",
+        owner: "",
+        exhibitionHistory: "2026 Serendipity / Daikanyama",
+        memo: "大型LEDネオン風サイン作品。プロトタイプ用のサンプルレコードです。",
+        createdAt: nowIso(),
+        updatedAt: nowIso()
+      }];
       save();
     }
 
@@ -764,7 +779,7 @@
 
     function renderChips() {
       const items = ["ALL", ...MANAGEMENT_STATUSES];
-      statusChips.innerHTML = items.map(s => `<button class="chip ${s === activeStatus ? "active" : ""}" type="button" onclick="setStatusFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("");
+      statusChips.innerHTML = items.map(s => `<button class="chip vam-chip ${s === activeStatus ? "active vam-chip-active" : ""}" type="button" onclick="setStatusFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("");
     }
 
     window.setStatusFilter = function(status) {
@@ -776,7 +791,9 @@
       const ids = ["vault", "entry", "data"];
       ids.forEach(id => {
         document.getElementById(id + "Screen").classList.toggle("active", id === name);
-        document.getElementById(id + "NavButton").classList.toggle("active", id === name);
+        const button = document.getElementById(id + "NavButton");
+        button.classList.toggle("active", id === name);
+        button.classList.toggle("vam-nav-button-active", id === name);
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
@@ -790,8 +807,8 @@
       fields.productionStatus.value = "完成";
       fields.managementStatus.value = "保管中";
       fields.location.value = locations[0] || "";
-      document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
-      document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
+      document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note vam-note">作品登録</span>';
+      document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note vam-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
       document.getElementById("cancelButton").style.display = "none";
     }
@@ -804,6 +821,7 @@
         id: existing.id || createId(),
         title: fields.title.value.trim(),
         year: fields.year.value.trim(),
+        completedDate: fields.completedDate.value,
         series: fields.series.value.trim(),
         technique: fields.technique.value,
         materials: fields.materials.value.trim(),
@@ -829,13 +847,8 @@
         alert("作品名を入力してください。");
         return;
       }
-
-      if (editingId) {
-        works = works.map(w => w.id === editingId ? formToWork(w) : w);
-      } else {
-        works.push(formToWork());
-      }
-
+      if (editingId) works = works.map(w => w.id === editingId ? formToWork(w) : w);
+      else works.push(formToWork());
       save();
       resetForm();
       render();
@@ -853,6 +866,7 @@
       editingId = id;
       fields.title.value = w.title || "";
       fields.year.value = w.year || "";
+      fields.completedDate.value = w.completedDate || "";
       fields.series.value = w.series || "";
       renderCatalogSelect(techniqueSelect, techniques, w.technique || "");
       fields.materials.value = w.materials || "";
@@ -869,8 +883,8 @@
       fields.owner.value = w.owner || "";
       fields.exhibitionHistory.value = w.exhibitionHistory || "";
       fields.memo.value = w.memo || "";
-      document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note">作品編集</span>';
-      document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note">作品情報を編集</span>';
+      document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note vam-note">作品編集</span>';
+      document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note vam-note">作品情報を編集</span>';
       document.getElementById("submitButton").textContent = "Update Record";
       document.getElementById("cancelButton").style.display = "block";
       showScreen("entry");
@@ -885,20 +899,10 @@
     };
 
     function normalizeDimensions(w = {}) {
-      if (w.sizeW || w.sizeH || w.sizeD) {
-        return {
-          w: String(w.sizeW || ""),
-          h: String(w.sizeH || ""),
-          d: String(w.sizeD || "")
-        };
-      }
+      if (w.sizeW || w.sizeH || w.sizeD) return { w: String(w.sizeW || ""), h: String(w.sizeH || ""), d: String(w.sizeD || "") };
       const size = String(w.size || "");
       const match = size.match(/W?\s*(\d+)\D+H?\s*(\d+)\D+D?\s*(\d+)/i);
-      return {
-        w: match ? match[1] : "",
-        h: match ? match[2] : "",
-        d: match ? match[3] : ""
-      };
+      return { w: match ? match[1] : "", h: match ? match[2] : "", d: match ? match[3] : "" };
     }
 
     function normalizeStatuses(w = {}) {
@@ -918,9 +922,7 @@
       return parts.length ? `${parts.join(" × ")} mm` : String(w.size || "");
     }
 
-    function formatMoney(value) {
-      return value === "" || value == null ? "" : yen.format(Number(value) || 0);
-    }
+    function formatMoney(value) { return value === "" || value == null ? "" : yen.format(Number(value) || 0); }
 
     function render() {
       renderChips();
@@ -933,7 +935,7 @@
         .filter(w => {
           if (!query) return true;
           const statuses = normalizeStatuses(w);
-          return [w.title, w.year, w.series, w.technique, w.materials, formatDimensions(w), w.price, w.cost, statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
+          return [w.title, w.year, w.completedDate, w.series, w.technique, w.materials, formatDimensions(w), w.price, w.cost, statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
             .some(v => String(v || "").toLowerCase().includes(query));
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
@@ -953,14 +955,14 @@
         if (w.price !== "" && w.price != null) priceParts.push(`Sales ${formatMoney(w.price)}`);
         if (w.cost !== "" && w.cost != null) priceParts.push(`Cost ${formatMoney(w.cost)}`);
         return `
-        <article class="work-item">
+        <article class="work-item vam-work-card">
           <div class="work-top">
             <div>
-              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}</div>
+              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}${w.completedDate ? ` / COMPLETED ${escapeHtml(w.completedDate)}` : ""}</div>
               <div class="work-title">${escapeHtml(w.title)}</div>
               <div class="chips">
-                <div class="status-pill">${escapeHtml(statuses.productionStatus)}</div>
-                <div class="status-pill">${escapeHtml(statuses.managementStatus)}</div>
+                <div class="status-pill vam-status-pill">${escapeHtml(statuses.productionStatus)}</div>
+                <div class="status-pill vam-status-pill">${escapeHtml(statuses.managementStatus)}</div>
               </div>
               <div class="work-meta">
                 ${escapeHtml(w.technique || "No technique")} / ${escapeHtml(w.materials || "No materials")}<br>
@@ -971,16 +973,14 @@
           ${w.exhibitionHistory ? `<div class="work-meta" style="margin-top:10px;"><strong>Exhibition:</strong> ${escapeHtml(w.exhibitionHistory)}</div>` : ""}
           ${w.memo ? `<div class="work-meta" style="margin-top:10px;">${escapeHtml(w.memo)}</div>` : ""}
           <div class="item-actions">
-            <button class="secondary" type="button" onclick="startEdit('${escapeAttr(w.id)}')">Edit</button>
-            <button class="danger" type="button" onclick="deleteWork('${escapeAttr(w.id)}')">Delete</button>
+            <button class="secondary vam-button-secondary" type="button" onclick="startEdit('${escapeAttr(w.id)}')">Edit</button>
+            <button class="danger vam-button-danger" type="button" onclick="deleteWork('${escapeAttr(w.id)}')">Delete</button>
           </div>
-        </article>
-      `;
+        </article>`;
       }).join("") + '</div>';
     }
 
     searchInput.addEventListener("input", render);
-
     document.getElementById("addTechniqueButton").addEventListener("click", () => addOption("technique"));
     document.getElementById("addLocationButton").addEventListener("click", () => addOption("location"));
     document.getElementById("techniqueOptionInput").addEventListener("keydown", event => {
@@ -998,7 +998,7 @@
       const backup = {
         app: "(VAMRSS)WORKSHEET VAULT SYSTEM",
         abbreviation: "WSV",
-        version: "prototype-0.2",
+        version: "prototype-1.0",
         exportedAt: nowIso(),
         works
       };
@@ -1027,6 +1027,7 @@
             id: w.id || createId(),
             title: String(w.title || "Untitled"),
             year: String(w.year || ""),
+            completedDate: String(w.completedDate || ""),
             series: String(w.series || ""),
             technique: String(w.technique || ""),
             materials: String(w.materials || ""),

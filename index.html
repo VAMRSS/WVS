@@ -143,20 +143,20 @@
 
     .section {
       padding: 18px;
-      border: 1px solid var(--line);
+      border: 0.5px solid var(--line);
       border-radius: var(--radius);
       background: rgba(255,255,255,0.86);
-      box-shadow: 0 10px 28px rgba(15,30,48,0.045);
+      box-shadow: 0 8px 22px rgba(15,30,48,0.035);
     }
 
     .status-section {
-      padding: 22px;
-      border-color: rgba(20,32,51,0.28);
+      padding: 26px 26px 28px;
+      border-color: rgba(20,32,51,0.16);
       background:
         radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 36%),
         linear-gradient(135deg, var(--deep), var(--deep-2));
       color: var(--surface);
-      box-shadow: 0 20px 60px rgba(12, 21, 31, 0.16);
+      box-shadow: 0 18px 46px rgba(12, 21, 31, 0.13);
     }
 
     .section-head {
@@ -182,20 +182,30 @@
     .stat {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 14px;
-      align-items: start;
-      min-height: 128px;
-      padding: 10px 2px 8px;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      align-items: stretch;
+      min-height: 224px;
+      padding: 22px 2px 4px;
       text-align: left;
     }
 
-    .stat span { color: rgba(255,255,255,0.66); font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+    .stat span {
+      align-self: start;
+      color: rgba(255,255,255,0.66);
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      line-height: 1.15;
+      text-transform: uppercase;
+    }
     .stat strong {
       width: 100%;
       text-align: right;
+      align-self: end;
       justify-self: stretch;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      font-size: clamp(76px, 24vw, 128px);
+      font-size: clamp(120px, 31vw, 172px);
       line-height: 0.82;
       font-weight: 500;
       letter-spacing: -0.08em;
@@ -340,7 +350,7 @@
       .container { padding-top: 28px; }
       .hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
       .overview-grid { grid-template-columns: 1fr; }
-      .stat { min-height: 152px; }
+      .stat { min-height: 256px; }
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid .wide { grid-column: 1 / -1; }
       .button-row { grid-template-columns: 1fr auto; }

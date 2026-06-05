@@ -176,14 +176,16 @@
 
     .overview-grid {
       display: grid;
-      gap: 18px;
+      gap: 0;
       margin-top: 24px;
       color: inherit;
     }
 
     .stat {
       display: grid;
-      gap: 6px;
+      gap: 12px;
+      padding: 18px 0;
+      border-top: 1px solid rgba(255,255,255,0.16);
       text-align: left;
     }
 
@@ -198,7 +200,7 @@
 
     .stat strong {
       width: 100%;
-      text-align: right;
+      text-align: left;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-size: clamp(112px, 31vw, 166px);
       line-height: 0.72;
@@ -206,18 +208,33 @@
       letter-spacing: -0.08em;
     }
 
-    .stat-secondary {
-      justify-self: end;
-      min-width: min(64%, 260px);
+    .stat-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 16px;
+      padding: 16px 0;
+      border-top: 1px solid rgba(255,255,255,0.16);
     }
 
-    .stat-secondary span {
+    .stat-row span {
+      color: rgba(255,255,255,0.62);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+      text-align: left;
+      text-transform: uppercase;
+    }
+
+    .stat-row strong {
+      min-width: 72px;
       text-align: right;
-    }
-
-    .stat-secondary strong {
+      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-size: clamp(38px, 11vw, 64px);
       line-height: 0.82;
+      font-weight: 500;
+      letter-spacing: -0.08em;
     }
 
     form { display: grid; gap: 12px; }
@@ -392,7 +409,8 @@
           </div>
           <div class="overview-grid">
             <div class="stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
-            <div class="stat stat-secondary"><span>In Progress / 進行作品数</span><strong id="productionWorks">0</strong></div>
+            <div class="stat-row"><span>In Progress / 進行中</span><strong id="productionWorks">0</strong></div>
+            <div class="stat-row"><span>Stored / 保管中</span><strong id="storedWorks">0</strong></div>
           </div>
         </section>
 
@@ -790,6 +808,7 @@
 
       document.getElementById("totalWorks").textContent = works.length;
       document.getElementById("productionWorks").textContent = works.filter(w => normalizeStatuses(w).productionStatus === "制作中").length;
+      document.getElementById("storedWorks").textContent = works.filter(w => normalizeStatuses(w).managementStatus === "保管中").length;
 
       if (!filtered.length) {
         workList.innerHTML = '<div class="empty">No records found.<br>該当する作品レコードがありません。</div>';

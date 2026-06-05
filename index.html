@@ -179,52 +179,54 @@
       line-height: 0.95;
     }
 
-    .status-title {
-      display: flex;
-      align-items: end;
-      gap: 10px;
+    .status-summary-title {
       margin: 0;
-      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      font-size: clamp(38px, 13vw, 78px);
-      font-weight: 500;
-      line-height: 0.92;
-      letter-spacing: -0.08em;
-    }
-
-    .status-title .jp-note {
-      margin: 0 0 7px;
-      letter-spacing: 0.02em;
-      line-height: 1;
+      color: rgba(255,255,255,0.86);
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
     }
 
     .overview-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.12);
       color: inherit;
     }
 
     .stat {
       display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr auto;
-      gap: 0;
-      align-items: stretch;
-      min-height: 118px;
-      padding: 0 2px;
+      gap: 18px;
+      min-height: 128px;
+      padding: 18px 16px 16px;
+      background: rgba(13,23,37,0.38);
       text-align: left;
+    }
+
+    .stat span {
+      color: rgba(255,255,255,0.62);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+      text-transform: uppercase;
     }
 
     .stat strong {
       width: 100%;
-      display: flex;
-      justify-content: flex-end;
-      align-items: baseline;
-      gap: 6px;
       text-align: right;
       align-self: end;
       justify-self: stretch;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      font-size: clamp(120px, 31vw, 172px);
-      line-height: 0.68;
+      font-size: clamp(54px, 15vw, 88px);
+      line-height: 0.82;
       font-weight: 500;
       letter-spacing: -0.08em;
     }
@@ -366,8 +368,7 @@
     @media (min-width: 640px) {
       .container { padding-top: 28px; }
       .hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
-      .overview-grid { grid-template-columns: 1fr; }
-      .stat { min-height: 142px; }
+      .stat { min-height: 146px; }
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid .wide { grid-column: 1 / -1; }
       .button-row { grid-template-columns: 1fr auto; }
@@ -399,10 +400,11 @@
         <section class="section status-section">
           <div class="section-head">
             <div class="section-number">Overview</div>
-            <div class="status-title">Total<br>Works<span class="jp-note">登録作品数</span></div>
+            <h2 class="status-summary-title">Works Summary<span class="jp-note">作品数</span></h2>
           </div>
           <div class="overview-grid">
-            <div class="stat"><strong id="totalWorks">0</strong></div>
+            <div class="stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
+            <div class="stat"><span>In Progress / 制作作品数</span><strong id="productionWorks">0</strong></div>
           </div>
         </section>
 
@@ -799,6 +801,7 @@
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
 
       document.getElementById("totalWorks").textContent = works.length;
+      document.getElementById("productionWorks").textContent = works.filter(w => normalizeStatuses(w).productionStatus === "制作中").length;
 
       if (!filtered.length) {
         workList.innerHTML = '<div class="empty">No records found.<br>該当する作品レコードがありません。</div>';

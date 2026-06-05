@@ -227,15 +227,6 @@
       line-height: 0.68;
       font-weight: 500;
       letter-spacing: -0.08em;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .stat .unit {
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
-      font-size: clamp(18px, 5vw, 28px);
-      font-weight: 800;
-      letter-spacing: 0.02em;
-      line-height: 1;
     }
 
     form { display: grid; gap: 12px; }
@@ -807,7 +798,7 @@
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
 
-      document.getElementById("totalWorks").innerHTML = `${String(works.length).padStart(5, "0")}<span class="unit">点</span>`;
+      document.getElementById("totalWorks").textContent = works.length;
 
       if (!filtered.length) {
         workList.innerHTML = '<div class="empty">No records found.<br>該当する作品レコードがありません。</div>';

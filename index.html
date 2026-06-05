@@ -161,7 +161,7 @@
 
     .section-head {
       display: grid;
-      gap: 0;
+      gap: 5px;
       margin-bottom: 0;
     }
 
@@ -174,10 +174,27 @@
       color: rgba(255,255,255,0.58);
     }
 
-    .status-section h2,
     .status-section .section-number,
     .status-section .jp-note {
       line-height: 0.95;
+    }
+
+    .status-title {
+      display: flex;
+      align-items: end;
+      gap: 10px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-size: clamp(38px, 13vw, 78px);
+      font-weight: 500;
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+    }
+
+    .status-title .jp-note {
+      margin: 0 0 7px;
+      letter-spacing: 0.02em;
+      line-height: 1;
     }
 
     .overview-grid {
@@ -198,6 +215,10 @@
 
     .stat strong {
       width: 100%;
+      display: flex;
+      justify-content: flex-end;
+      align-items: baseline;
+      gap: 6px;
       text-align: right;
       align-self: end;
       justify-self: stretch;
@@ -207,6 +228,14 @@
       font-weight: 500;
       letter-spacing: -0.08em;
       font-variant-numeric: tabular-nums;
+    }
+
+    .stat .unit {
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
+      font-size: clamp(18px, 5vw, 28px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      line-height: 1;
     }
 
     form { display: grid; gap: 12px; }
@@ -379,7 +408,7 @@
         <section class="section status-section">
           <div class="section-head">
             <div class="section-number">Overview</div>
-            <h2>Total Works<span class="jp-note">登録作品数</span></h2>
+            <div class="status-title">Total<br>Works<span class="jp-note">登録作品数</span></div>
           </div>
           <div class="overview-grid">
             <div class="stat"><strong id="totalWorks">0</strong></div>
@@ -778,7 +807,7 @@
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
 
-      document.getElementById("totalWorks").textContent = works.length;
+      document.getElementById("totalWorks").innerHTML = `${String(works.length).padStart(5, "0")}<span class="unit">点</span>`;
 
       if (!filtered.length) {
         workList.innerHTML = '<div class="empty">No records found.<br>該当する作品レコードがありません。</div>';

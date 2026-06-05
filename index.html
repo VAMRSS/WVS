@@ -405,7 +405,8 @@
                 </div>
               </div>
               <div class="field"><label for="price">Private Price / 内部価格</label><input id="price" type="number" inputmode="numeric" min="0" placeholder="300000"></div>
-              <div class="field"><label for="status">Status / 状態</label><select id="status"></select></div>
+              <div class="field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
+              <div class="field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
               <div class="field"><label for="location">Location / 保管場所</label><input id="location" type="text" placeholder="Studio"></div>
               <div class="field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder="Private collection"></div>
               <div class="field wide"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder="2026 Serendipity, Daikanyama"></textarea></div>
@@ -476,7 +477,20 @@
 
   <script>
     const STORAGE_KEY = "vamrss-wsv-works-v1";
-    const STATUSES = ["制作中", "完成", "展示中", "販売中", "売約済", "非売", "保管中", "貸出中"];
+    const PRODUCTION_STATUSES = ["制作中", "完成"];
+    const MANAGEMENT_STATUSES = ["展示中", "販売中", "売却済み", "非売品", "保管中", "貸出中"];
+    const LEGACY_STATUS_MAP = {
+      "制作中": { productionStatus: "制作中", managementStatus: "保管中" },
+      "完成": { productionStatus: "完成", managementStatus: "保管中" },
+      "展示中": { productionStatus: "完成", managementStatus: "展示中" },
+      "販売中": { productionStatus: "完成", managementStatus: "販売中" },
+      "売約済": { productionStatus: "完成", managementStatus: "売却済み" },
+      "売却済み": { productionStatus: "完成", managementStatus: "売却済み" },
+      "非売": { productionStatus: "完成", managementStatus: "非売品" },
+      "非売品": { productionStatus: "完成", managementStatus: "非売品" },
+      "保管中": { productionStatus: "完成", managementStatus: "保管中" },
+      "貸出中": { productionStatus: "完成", managementStatus: "貸出中" }
+    };
     const yen = new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY", maximumFractionDigits: 0 });
 
     let works = [];
@@ -485,7 +499,8 @@
 
     const form = document.getElementById("workForm");
     const workList = document.getElementById("workList");
-    const statusSelect = document.getElementById("status");
+    const productionStatusSelect = document.getElementById("productionStatus");
+    const managementStatusSelect = document.getElementById("managementStatus");
     const statusChips = document.getElementById("statusChips");
     const searchInput = document.getElementById("searchInput");
 
@@ -499,7 +514,8 @@
       sizeH: document.getElementById("sizeH"),
       sizeD: document.getElementById("sizeD"),
       price: document.getElementById("price"),
-      status: document.getElementById("status"),
+      productionStatus: document.getElementById("productionStatus"),
+      managementStatus: document.getElementById("managementStatus"),
       location: document.getElementById("location"),
       owner: document.getElementById("owner"),
       exhibitionHistory: document.getElementById("exhibitionHistory"),
@@ -537,7 +553,8 @@
           sizeD: "100",
           completedDate: "2026-04-28",
           price: "",
-          status: "展示中",
+          productionStatus: "完成",
+          managementStatus: "展示中",
           location: "Daikanyama / Gallery",
           owner: "",
           exhibitionHistory: "2026 Serendipity / Daikanyama",
@@ -550,12 +567,13 @@
     }
 
     function setupStatusOptions() {
-      statusSelect.innerHTML = STATUSES.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+      productionStatusSelect.innerHTML = PRODUCTION_STATUSES.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
+      managementStatusSelect.innerHTML = MANAGEMENT_STATUSES.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join("");
       renderChips();
     }
 
     function renderChips() {
-      const items = ["ALL", ...STATUSES];
+      const items = ["ALL", ...MANAGEMENT_STATUSES];
       statusChips.innerHTML = items.map(s => `<button class="chip ${s === activeStatus ? "active" : ""}" type="button" onclick="setStatusFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("");
     }
 
@@ -576,7 +594,8 @@
     function resetForm() {
       editingId = null;
       form.reset();
-      fields.status.value = "完成";
+      fields.productionStatus.value = "完成";
+      fields.managementStatus.value = "保管中";
       document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
       document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
@@ -597,7 +616,8 @@
         sizeH: fields.sizeH.value.trim(),
         sizeD: fields.sizeD.value.trim(),
         price,
-        status: fields.status.value,
+        productionStatus: fields.productionStatus.value,
+        managementStatus: fields.managementStatus.value,
         location: fields.location.value.trim(),
         owner: fields.owner.value.trim(),
         exhibitionHistory: fields.exhibitionHistory.value.trim(),
@@ -645,7 +665,9 @@
       fields.sizeH.value = dims.h;
       fields.sizeD.value = dims.d;
       fields.price.value = w.price || "";
-      fields.status.value = w.status || "完成";
+      const statuses = normalizeStatuses(w);
+      fields.productionStatus.value = statuses.productionStatus;
+      fields.managementStatus.value = statuses.managementStatus;
       fields.location.value = w.location || "";
       fields.owner.value = w.owner || "";
       fields.exhibitionHistory.value = w.exhibitionHistory || "";
@@ -682,6 +704,14 @@
       };
     }
 
+    function normalizeStatuses(w = {}) {
+      const legacy = LEGACY_STATUS_MAP[w.status] || {};
+      return {
+        productionStatus: PRODUCTION_STATUSES.includes(w.productionStatus) ? w.productionStatus : legacy.productionStatus || "完成",
+        managementStatus: MANAGEMENT_STATUSES.includes(w.managementStatus) ? w.managementStatus : legacy.managementStatus || "保管中"
+      };
+    }
+
     function formatDimensions(w = {}) {
       const d = normalizeDimensions(w);
       const parts = [];
@@ -695,10 +725,14 @@
       renderChips();
       const query = searchInput.value.trim().toLowerCase();
       const filtered = works
-        .filter(w => activeStatus === "ALL" || w.status === activeStatus)
+        .filter(w => {
+          const statuses = normalizeStatuses(w);
+          return activeStatus === "ALL" || statuses.managementStatus === activeStatus;
+        })
         .filter(w => {
           if (!query) return true;
-          return [w.title, w.year, w.completedDate, w.series, w.materials, formatDimensions(w), w.status, w.location, w.owner, w.exhibitionHistory, w.memo]
+          const statuses = normalizeStatuses(w);
+          return [w.title, w.year, w.completedDate, w.series, w.materials, formatDimensions(w), statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
             .some(v => String(v || "").toLowerCase().includes(query));
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
@@ -710,13 +744,18 @@
         return;
       }
 
-      workList.innerHTML = '<div class="work-list">' + filtered.map(w => `
+      workList.innerHTML = '<div class="work-list">' + filtered.map(w => {
+        const statuses = normalizeStatuses(w);
+        return `
         <article class="work-item">
           <div class="work-top">
             <div>
               <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} ${w.completedDate ? `/ Completed ${escapeHtml(w.completedDate)}` : ""} / ${escapeHtml(w.series || "NO SERIES")}</div>
               <div class="work-title">${escapeHtml(w.title)}</div>
-              <div class="status-pill">${escapeHtml(w.status || "未設定")}</div>
+              <div class="chips">
+                <div class="status-pill">${escapeHtml(statuses.productionStatus)}</div>
+                <div class="status-pill">${escapeHtml(statuses.managementStatus)}</div>
+              </div>
               <div class="work-meta">
                 ${escapeHtml(w.materials || "No materials")}<br>
                 ${escapeHtml(formatDimensions(w) || "No size")} / ${escapeHtml(w.location || "No location")}
@@ -730,7 +769,8 @@
             <button class="danger" type="button" onclick="deleteWork('${escapeAttr(w.id)}')">Delete</button>
           </div>
         </article>
-      `).join("") + '</div>';
+      `;
+      }).join("") + '</div>';
     }
 
     searchInput.addEventListener("input", render);
@@ -775,7 +815,8 @@
             sizeH: normalizeDimensions(w).h,
             sizeD: normalizeDimensions(w).d,
             price: w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0)),
-            status: STATUSES.includes(w.status) ? w.status : "完成",
+            productionStatus: normalizeStatuses(w).productionStatus,
+            managementStatus: normalizeStatuses(w).managementStatus,
             location: String(w.location || ""),
             owner: String(w.owner || ""),
             exhibitionHistory: String(w.exhibitionHistory || ""),

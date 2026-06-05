@@ -227,14 +227,15 @@
     }
 
     textarea { min-height: 88px; resize: vertical; line-height: 1.65; }
-    input[type="date"] {
+    .date-input {
+      appearance: none;
+      -webkit-appearance: none;
       text-align: left;
-      font-size: 14px;
+      font-size: 16px;
       letter-spacing: 0.01em;
-      padding-right: 10px;
+      padding-right: 14px;
       overflow: hidden;
     }
-    input[type="date"]::-webkit-date-and-time-value { text-align: left; }
     input:focus, textarea:focus, select:focus { border-color: var(--line-strong); background: rgba(255,255,255,0.86); }
 
     .form-grid { display: grid; gap: 12px; }
@@ -422,7 +423,7 @@
             <div class="form-grid">
               <div class="field wide"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="例：WHO CURATED YOUR LUCK?" required></div>
               <div class="field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder="2026"></div>
-              <div class="field"><label for="completedDate">Completed / 完成日</label><input id="completedDate" type="date"></div>
+              <div class="field"><label for="completedDate">Completed / 完成日</label><input id="completedDate" class="date-input" type="text" inputmode="numeric" autocomplete="off" placeholder="YYYY/MM/DD" maxlength="10"></div>
               <div class="field wide"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder="Serendipity"></div>
               <div class="field wide"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder="LED, acrylic, cable"></div>
               <div class="field wide">
@@ -580,7 +581,7 @@
           sizeW: "1500",
           sizeH: "800",
           sizeD: "100",
-          completedDate: "2026-04-28",
+          completedDate: "2026/04/28",
           price: "",
           productionStatus: "完成",
           managementStatus: "展示中",
@@ -640,7 +641,7 @@
         year: fields.year.value.trim(),
         series: fields.series.value.trim(),
         materials: fields.materials.value.trim(),
-        completedDate: fields.completedDate.value,
+        completedDate: normalizeCompletedDate(fields.completedDate.value),
         sizeW: fields.sizeW.value.trim(),
         sizeH: fields.sizeH.value.trim(),
         sizeD: fields.sizeD.value.trim(),
@@ -689,7 +690,7 @@
       fields.series.value = w.series || "";
       fields.materials.value = w.materials || "";
       const dims = normalizeDimensions(w);
-      fields.completedDate.value = w.completedDate || "";
+      fields.completedDate.value = normalizeCompletedDate(w.completedDate || "");
       fields.sizeW.value = dims.w;
       fields.sizeH.value = dims.h;
       fields.sizeD.value = dims.d;
@@ -731,6 +732,10 @@
         h: match ? match[2] : "",
         d: match ? match[3] : ""
       };
+    }
+
+    function normalizeCompletedDate(value = "") {
+      return String(value).trim().replaceAll("-", "/").replaceAll(".", "/");
     }
 
     function normalizeStatuses(w = {}) {
@@ -839,7 +844,7 @@
             year: String(w.year || ""),
             series: String(w.series || ""),
             materials: String(w.materials || ""),
-            completedDate: String(w.completedDate || ""),
+            completedDate: normalizeCompletedDate(w.completedDate || ""),
             sizeW: normalizeDimensions(w).w,
             sizeH: normalizeDimensions(w).h,
             sizeD: normalizeDimensions(w).d,

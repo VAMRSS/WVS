@@ -181,16 +181,26 @@
 
     .stat {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 18px;
-      align-items: end;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: start;
       min-height: 128px;
-      padding: 10px 2px 4px;
+      padding: 10px 2px 8px;
       text-align: left;
     }
 
     .stat span { color: rgba(255,255,255,0.66); font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-    .stat strong { justify-self: end; font-size: clamp(76px, 24vw, 128px); line-height: 0.82; font-weight: 500; letter-spacing: -0.08em; font-variant-numeric: tabular-nums; }
+    .stat strong {
+      width: 100%;
+      text-align: right;
+      justify-self: stretch;
+      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-size: clamp(76px, 24vw, 128px);
+      line-height: 0.82;
+      font-weight: 500;
+      letter-spacing: -0.08em;
+      font-variant-numeric: tabular-nums;
+    }
 
     form { display: grid; gap: 12px; }
     .field { display: grid; gap: 7px; }
@@ -217,7 +227,13 @@
     }
 
     textarea { min-height: 88px; resize: vertical; line-height: 1.65; }
-    input[type="date"] { text-align: left; }
+    input[type="date"] {
+      text-align: left;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      padding-right: 10px;
+      overflow: hidden;
+    }
     input[type="date"]::-webkit-date-and-time-value { text-align: left; }
     input:focus, textarea:focus, select:focus { border-color: var(--line-strong); background: rgba(255,255,255,0.86); }
 

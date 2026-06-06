@@ -789,6 +789,42 @@
       .price-grid { grid-template-columns: 1fr; }
     }
 
+
+    @media (max-width: 520px) {
+      .topbar {
+        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-areas:
+          "brand action"
+          "title title";
+        height: auto;
+        min-height: 68px;
+        row-gap: 6px;
+      }
+
+      .brand {
+        grid-area: brand;
+        grid-column: auto;
+        min-width: 0;
+        width: 100%;
+        justify-self: start;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+
+      .top-title {
+        grid-area: title;
+        grid-column: auto;
+        justify-self: start;
+      }
+
+      .top-action {
+        grid-area: action;
+        grid-column: auto;
+        justify-self: end;
+      }
+    }
+
     @media (min-width: 640px) {
       .container { padding-top: 28px; }
       .hero {

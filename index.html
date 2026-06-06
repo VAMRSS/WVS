@@ -818,8 +818,8 @@
     <section id="vaultScreen" class="screen active">
       <div class="page">
         <div class="topbar">
-          <div class="brand">＊ (VAMRSS) WSV</div>
-          <div class="top-title">WORKS VAULT</div>
+          <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
+          <div class="top-title">WORKSHEET VAULT</div>
           <button class="top-action" type="button" onclick="showScreen('data')">DATA</button>
         </div>
 
@@ -860,15 +860,15 @@
           <div id="workList"></div>
         </section>
 
-        <footer class="site-footer">(VAMRSS) WORKSHEET VAULT SYSTEM / © 2026 VAMRSS</footer>
+        <footer class="site-footer">＊(VAMRSS) WORKSHEET VAULT / © 2026 VAMRSS</footer>
       </div>
     </section>
 
     <section id="entryScreen" class="screen">
       <div class="page">
         <div class="topbar">
-          <div class="brand">＊ NEW RECORD</div>
-          <div class="top-title">WORKSHEET</div>
+          <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
+          <div class="top-title" id="entryTopTitle">NEW WORK</div>
           <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
@@ -926,14 +926,16 @@
             </div>
           </form>
         </section>
+
+        <footer class="site-footer">＊(VAMRSS) WORKSHEET VAULT / © 2026 VAMRSS</footer>
       </div>
     </section>
 
     <section id="dataScreen" class="screen">
       <div class="page">
         <div class="topbar">
-          <div class="brand">＊ DATA ROOM</div>
-          <div class="top-title">IMPORT / EXPORT</div>
+          <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
+          <div class="top-title">DATA ROOM</div>
           <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
@@ -956,7 +958,7 @@
             <article class="data-card">
               <div class="data-role">Export</div>
               <p class="data-title">Export Vault</p>
-              <p class="data-text">現在の作品データをJSONとして保存します。ファイル名は <strong>VAMRYYYYMMDD-HHMM.json</strong> 形式です。</p>
+              <p class="data-text">現在の作品データをJSONとして保存します。ファイル名は <strong>WSV-YYYYMMDD-HHMM.json</strong> 形式です。</p>
               <div class="data-meta" id="exportMeta">Last export / 未実行</div>
               <div class="data-actions"><button class="primary" type="button" id="exportButton">Export Vault</button></div>
             </article>
@@ -1013,6 +1015,8 @@
             </article>
           </div>
         </section>
+
+        <footer class="site-footer">＊(VAMRSS) WORKSHEET VAULT / © 2026 VAMRSS</footer>
       </div>
     </section>
   </main>
@@ -1043,7 +1047,7 @@
     const LOCATION_STORAGE_KEY = "vamrss-wsv-locations-v1";
     const EXPORT_META_KEY = "vamrss-wsv-last-export-v1";
     const APP_TITLE = "(VAMRSS)WORKSHEET VAULT SYSTEM";
-    const APP_ABBREVIATION = "VAMR";
+    const APP_ABBREVIATION = "WSV";
 
     const DEFAULT_TECHNIQUES = ["Painting", "Sculpture", "Installation", "Drawing", "Photography", "Video", "Mixed Media"];
     const DEFAULT_LOCATIONS = ["Studio", "Storage", "Gallery", "Collector", "Archive"];
@@ -1121,7 +1125,7 @@
       const d = new Date();
       const yyyymmdd = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
       const hhmm = `${pad(d.getHours())}${pad(d.getMinutes())}`;
-      return `${APP_ABBREVIATION}${yyyymmdd}-${hhmm}.json`;
+      return `${APP_ABBREVIATION}-${yyyymmdd}-${hhmm}.json`;
     }
 
     function showToast(message) {
@@ -1306,6 +1310,8 @@
       document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
       document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
+      const entryTopTitle = document.getElementById("entryTopTitle");
+      if (entryTopTitle) entryTopTitle.textContent = "NEW WORK";
       document.getElementById("cancelButton").style.display = "none";
       if (!options.keepScreen) render();
     }
@@ -1387,6 +1393,8 @@
       document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note">作品編集</span>';
       document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note">作品情報を編集</span>';
       document.getElementById("submitButton").textContent = "Update Record";
+      const entryTopTitle = document.getElementById("entryTopTitle");
+      if (entryTopTitle) entryTopTitle.textContent = "EDIT WORK";
       document.getElementById("cancelButton").style.display = "block";
       showScreen("entry");
     };

@@ -6,54 +6,49 @@
   <title>(VAMRSS)WORKSHEET VAULT SYSTEM / WSV v1.0</title>
   <style>
     :root {
-      /* Base */
-      --bg: #f6f8fb;
+      /* Surface / 面・構造 */
+      --bg: #fafbfc;
       --surface: #ffffff;
-      --surface-soft: #f1f5f9;
-      --surface-cool: #eef3f8;
-
-      /* Text */
-      --ink: #101722;
-      --sub: #607084;
-      --muted: #9aa8b8;
-
-      /* Structure */
       --line: #dfe7ef;
-      --line-strong: #b8c7d8;
-
-      /* Emphasis / Deep Green Archive */
       --deep: #071c16;
-      --deep-2: #102a22;
-      --deep-soft: #17372d;
-      --action: #102a22;
-
-      /* Danger */
       --danger: #9b3144;
 
-      /* Shape */
+      /* Text / 文字 */
+      --ink: #101722;
+      --sub: #607084;
+
+      /* Shared */
       --radius: 28px;
       --radius-small: 18px;
-      --shadow: 0 18px 50px rgba(15, 30, 48, 0.07);
+      --shadow: 0 18px 50px rgba(15, 30, 48, 0.055);
       --nav-height: 72px;
+      --motion-fast: 120ms;
+      --motion-base: 180ms;
+      --motion-ease: cubic-bezier(.2, .8, .2, 1);
     }
 
     * { box-sizing: border-box; }
+
     html { -webkit-text-size-adjust: 100%; }
+
     body {
       margin: 0;
       color: var(--ink);
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.92), transparent 34%),
-        linear-gradient(180deg, #ffffff 0%, var(--bg) 58%, #eef3f8 100%);
+      background: var(--bg);
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
       min-height: 100vh;
     }
 
     button, input, textarea, select { font: inherit; }
-    button { -webkit-tap-highlight-color: transparent; cursor: pointer; }
-    button:disabled { opacity: 0.48; cursor: not-allowed; }
 
-    .container, .vam-container {
+    button {
+      -webkit-tap-highlight-color: transparent;
+      cursor: pointer;
+    }
+
+    button:disabled { opacity: .48; cursor: not-allowed; }
+
+    .container {
       width: min(760px, calc(100% - 24px));
       margin: 0 auto;
       padding: max(18px, env(safe-area-inset-top)) 0 calc(var(--nav-height) + max(24px, env(safe-area-inset-bottom)));
@@ -61,142 +56,211 @@
 
     .screen { display: none; }
     .screen.active { display: block; }
-    .page, .vam-page { display: grid; gap: 16px; }
 
-    .topbar, .vam-topbar {
+    .page {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 16px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
       align-items: center;
       gap: 8px;
+      height: 44px;
       min-height: 44px;
     }
 
-    .brand, .top-title, .top-action, .section-number, .label, .nav-button, .chip, .status-pill,
-    .vam-brand, .vam-top-title, .vam-top-action, .vam-section-code, .vam-label, .vam-nav-button,
-    .vam-chip, .vam-status-pill {
+    .brand,
+    .top-title,
+    .top-action,
+    .section-number,
+    .label,
+    .nav-button,
+    .chip,
+    .status-pill,
+    label,
+    .mini-label,
+    .processing-pill,
+    .site-footer,
+    .data-role,
+    .dialog-kicker {
       font-size: 10px;
-      font-weight: 800;
+      font-weight: 500;
       letter-spacing: 0.09em;
       text-transform: uppercase;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
     }
 
-    .brand, .vam-brand {
+    .brand {
+      grid-column: 1;
+      justify-self: start;
+      align-self: center;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
       color: var(--sub);
+      opacity: .78;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
-    .top-title, .vam-top-title { color: var(--muted); }
-
-    .top-action, .vam-top-action {
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.82);
-      color: var(--ink);
-      min-height: 36px;
-      padding: 0 12px;
-      border-radius: 999px;
+    .top-title {
+      grid-column: 2;
+      justify-self: center;
+      align-self: center;
+      height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      color: var(--sub);
+      opacity: .78;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
     }
 
-    .hero, .vam-hero {
+    .top-action {
+      grid-column: 3;
+      justify-self: end;
+      align-self: center;
+      height: 36px;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      padding: 0 12px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.36);
+      backdrop-filter: blur(18px) saturate(1.08);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+      box-shadow: 0 14px 30px rgba(15,30,48,0.10);
+      color: var(--ink);
+      font-weight: 800;
+    }
+
+    .hero {
       display: grid;
       gap: 18px;
       padding: 24px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,0.9);
+      background: var(--surface);
       box-shadow: var(--shadow);
       overflow: hidden;
     }
 
-    .kicker, .vam-kicker {
+    .kicker {
       margin-bottom: 12px;
       color: var(--sub);
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.03em;
     }
 
-    h1, .vam-title {
+    h1,
+    h2,
+    .dialog-title {
       margin: 0;
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-weight: 500;
+    }
+
+    h1 {
       font-size: clamp(38px, 13vw, 78px);
       line-height: 0.92;
       letter-spacing: -0.08em;
     }
 
-    h2, .vam-section-title {
-      margin: 0;
-      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      font-weight: 500;
+    h2 {
       font-size: clamp(25px, 7vw, 38px);
       line-height: 0.98;
       letter-spacing: -0.06em;
     }
 
-    .jp-note, .vam-note {
+    .jp-note {
       display: inline-block;
       margin-left: 8px;
-      color: var(--muted);
+      color: var(--sub);
+      opacity: .62;
       font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", Meiryo, sans-serif;
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 500;
       letter-spacing: 0.02em;
       vertical-align: middle;
     }
 
-    .lead, .vam-lead {
+    .lead {
       margin: 0;
       color: var(--sub);
       font-size: 13px;
       line-height: 1.85;
+      font-weight: 400;
     }
 
-    .accent-rule, .vam-rule {
+    .solid-rule {
       height: 1px;
-      background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
+      background: var(--line);
     }
 
-    .section, .vam-section {
+    .section {
       padding: 18px;
       border: 0.5px solid var(--line);
       border-radius: var(--radius);
-      background: rgba(255,255,255,0.86);
-      box-shadow: 0 8px 22px rgba(15,30,48,0.035);
+      background: var(--surface);
+      box-shadow: 0 8px 22px rgba(15,30,48,0.03);
     }
 
     .section-soft {
-      background: rgba(241,245,249,0.76);
+      background: transparent;
+      border-style: dashed;
+      box-shadow: none;
     }
 
-    .status-section, .emphasis-section, .vam-section-emphasis {
-      padding: 22px 26px 16px;
-      border-color: rgba(7, 28, 22, 0.24);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.1), transparent 36%),
-        linear-gradient(135deg, var(--deep), var(--deep-2));
-      color: var(--surface);
-      box-shadow: 0 18px 46px rgba(7, 28, 22, 0.18);
+    .section-list {
+      background: transparent;
+      box-shadow: none;
+      border: 1px solid var(--line);
     }
 
-    .section-head, .vam-section-head {
+    .section-head {
       display: grid;
       gap: 5px;
       margin-bottom: 18px;
     }
 
-    .section-number, .label, .vam-section-code, .vam-label { color: var(--muted); }
-    .status-section .section-number,
-    .status-section .jp-note,
+    .section-number {
+      color: var(--sub);
+      opacity: .62;
+    }
+
+    .emphasis-section {
+      padding: 22px 26px 16px;
+      border-color: rgba(7, 28, 22, 0.22);
+      background: var(--deep);
+      color: var(--surface);
+      box-shadow: 0 18px 46px rgba(7, 28, 22, 0.16);
+    }
+
     .emphasis-section .section-number,
     .emphasis-section .jp-note {
       color: rgba(255,255,255,0.58);
+      opacity: 1;
     }
 
-    .overview-grid { display: grid; gap: 0; margin-top: 0; color: inherit; }
+    .overview-grid {
+      display: grid;
+      gap: 0;
+      color: inherit;
+    }
 
-    .stat, .vam-stat {
+    .stat {
       display: grid;
       gap: 10px;
       padding: 16px 0;
@@ -204,26 +268,31 @@
       text-align: left;
     }
 
-    .stat span, .stat-row span {
+    .stat span,
+    .stat-row span {
       color: rgba(255,255,255,0.62);
       font-size: 11px;
-      font-weight: 800;
+      font-weight: 500;
       letter-spacing: 0.08em;
       line-height: 1.35;
       text-transform: uppercase;
     }
 
-    .stat strong {
-      width: 100%;
-      text-align: left;
+    .stat strong,
+    .stat-row strong {
       font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
-      font-size: clamp(112px, 31vw, 166px);
       line-height: 0.72;
       font-weight: 500;
       letter-spacing: -0.08em;
     }
 
-    .stat-row, .vam-stat-row {
+    .stat strong {
+      width: 100%;
+      text-align: left;
+      font-size: clamp(112px, 31vw, 166px);
+    }
+
+    .stat-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
@@ -235,29 +304,35 @@
     .stat-row strong {
       min-width: 72px;
       text-align: right;
-      font-family: Georgia, "Times New Roman", "Hiragino Mincho ProN", "Yu Mincho", serif;
       font-size: clamp(38px, 11vw, 64px);
       line-height: 0.82;
-      font-weight: 500;
-      letter-spacing: -0.08em;
     }
 
     form { display: grid; gap: 12px; }
-    .field, .vam-field { display: grid; gap: 7px; }
 
-    label, .vam-label {
-      color: var(--sub);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
+    .form-grid,
+    .field,
+    .toolbar,
+    .setting-list,
+    .data-grid,
+    .notice-grid {
+      display: grid;
+      gap: 12px;
     }
 
-    input, textarea, select, .vam-input, .vam-textarea, .vam-select {
+    .field { gap: 7px; }
+
+    label {
+      color: var(--sub);
+    }
+
+    input,
+    textarea,
+    select {
       width: 100%;
       border: 1px solid var(--line);
       border-radius: var(--radius-small);
-      background: rgba(255,255,255,0.58);
+      background: var(--surface);
       color: var(--ink);
       min-height: 48px;
       padding: 13px 14px;
@@ -266,14 +341,62 @@
       text-align: left;
     }
 
-    textarea { min-height: 88px; resize: vertical; line-height: 1.65; }
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--line-strong);
-      background: rgba(255,255,255,0.86);
+    textarea {
+      min-height: 88px;
+      resize: vertical;
+      line-height: 1.65;
     }
 
-    .form-grid { display: grid; gap: 12px; }
-    .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    input:focus,
+    textarea:focus,
+    select:focus,
+    button:focus-visible,
+    .chip:focus-visible,
+    .nav-button:focus-visible {
+      outline: 2px solid rgba(7,28,22,0.42);
+      outline-offset: 3px;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--sub);
+      background: var(--surface);
+    }
+
+    input::placeholder,
+    textarea::placeholder { color: transparent; }
+
+    .toolbar-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .dimension-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .dimension-grid input {
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .mini-label {
+      margin-bottom: 6px;
+      color: var(--sub);
+      opacity: .62;
+      text-align: center;
+    }
+
     .ask-check {
       display: flex;
       align-items: center;
@@ -281,33 +404,35 @@
       min-height: 34px;
       margin-top: 6px;
       color: var(--sub);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
     }
+
     .ask-check input {
       width: 18px;
       min-height: 18px;
       padding: 0;
-      accent-color: var(--action);
-    }
-    .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .dimension-grid input { text-align: center; font-variant-numeric: tabular-nums; }
-
-    .mini-label {
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      text-align: center;
-      text-transform: uppercase;
+      accent-color: var(--deep);
     }
 
-    .button-row { display: grid; gap: 10px; }
+    .button-row,
+    .item-actions,
+    .dialog-actions {
+      display: grid;
+      gap: 8px;
+    }
 
-    button.primary, button.secondary, button.danger,
-    .vam-button, .vam-button-primary, .vam-button-secondary, .vam-button-danger {
+    .item-actions,
+    .dialog-actions {
+      grid-template-columns: 1fr 1fr;
+      margin-top: 12px;
+    }
+
+    button.primary,
+    button.secondary,
+    button.danger {
       min-height: 48px;
       border-radius: 999px;
       padding: 0 16px;
@@ -316,61 +441,147 @@
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
 
-    button.primary, .vam-button-primary { background: var(--action); color: var(--surface); border-color: var(--action); }
-    button.secondary, .vam-button-secondary { background: rgba(255,255,255,0.72); color: var(--ink); }
-    button.danger, .vam-button-danger { background: rgba(155,49,68,0.07); color: var(--danger); border-color: rgba(155,49,68,0.16); }
+    button.primary {
+      background: var(--deep);
+      color: var(--surface);
+      border-color: var(--deep);
+    }
 
-    .toolbar { display: grid; gap: 10px; margin-bottom: 14px; }
-    .toolbar-row { display: grid; grid-template-columns: 1fr; gap: 10px; }
+    button.secondary {
+      background: var(--surface);
+      color: var(--ink);
+    }
 
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
-    .chip, .vam-chip {
+    button.danger {
+      background: rgba(155,49,68,0.07);
+      color: var(--danger);
+      border-color: rgba(155,49,68,0.16);
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    #workList {
+      margin-top: 18px;
+    }
+
+    .chip,
+    .status-pill {
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255,255,255,0.74);
-      color: var(--sub);
       min-height: 34px;
       padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
-    .chip.active, .vam-chip-active { background: var(--action); color: var(--surface); border-color: var(--action); }
 
-    .work-list { display: grid; gap: 12px; }
-    .work-item, .vam-work-card {
+    .chip {
+      background: var(--surface);
+      color: var(--sub);
+      border-color: var(--line);
+      font-weight: 800;
+    }
+
+    .chip.active {
+      background: var(--deep);
+      color: var(--surface);
+      border-color: var(--deep);
+    }
+
+    .status-pill {
+      background: transparent;
+      color: var(--sub);
+      border-color: rgba(96,112,132,0.18);
+      opacity: .68;
+      font-weight: 500;
+    }
+
+    .work-list,
+    .sample-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .work-item,
+    .setting-group,
+    .data-card,
+    .notice-card {
       border: 1px solid var(--line);
       border-radius: 22px;
-      background: rgba(255,255,255,0.78);
+      background: var(--surface);
       padding: 14px;
     }
 
-    .work-top { display: grid; gap: 12px; }
-    .work-date { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-    .work-title { margin-top: 4px; font-size: 20px; font-weight: 700; letter-spacing: -0.04em; }
-    .work-meta { margin-top: 5px; color: var(--sub); font-size: 12px; line-height: 1.65; }
-
-    .status-pill, .vam-status-pill {
-      display: inline-flex;
-      align-items: center;
-      min-height: 28px;
-      width: fit-content;
-      padding: 0 10px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: var(--surface-soft);
+    .work-date {
       color: var(--sub);
-      margin-top: 8px;
+      opacity: .62;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
 
-    .item-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
-    .empty { border: 1px dashed var(--line-strong); border-radius: 22px; padding: 22px; color: var(--sub); font-size: 13px; line-height: 1.75; text-align: center; }
-    .hint { margin: 0 0 14px; color: var(--sub); font-size: 13px; line-height: 1.8; }
+    .work-title {
+      margin-top: 4px;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+    }
 
-    .setting-list { display: grid; gap: 8px; }
-    .setting-group { border: 1px solid var(--line); border-radius: 22px; padding: 14px; background: rgba(255,255,255,0.72); }
-    .setting-title { margin: 0 0 12px; font-weight: 800; letter-spacing: -0.02em; }
-    .setting-form { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-bottom: 10px; }
+    .work-meta,
+    .hint,
+    .data-text,
+    .notice-text,
+    .dialog-text,
+    .empty {
+      color: var(--sub);
+      font-size: 12px;
+      line-height: 1.75;
+      font-weight: 400;
+    }
+
+    .work-meta { margin-top: 8px; }
+    .hint { margin: 0 0 14px; }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      text-align: center;
+      background: transparent;
+    }
+
+    .setting-title,
+    .data-title,
+    .notice-title {
+      margin: 0 0 12px;
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.35;
+    }
+
+    .setting-form {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
     .setting-form button { min-width: 78px; }
+
     .setting-item {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
@@ -381,7 +592,9 @@
       color: var(--sub);
       font-size: 13px;
     }
+
     .setting-item:first-child { border-top: 0; }
+
     .setting-item button {
       min-height: 32px;
       padding: 0 10px;
@@ -397,18 +610,77 @@
 
     .file-input-wrap input[type="file"] { min-height: 44px; padding: 10px; }
 
-    .bottom-nav, .vam-bottom-nav {
+    .data-card.caution,
+    .notice-card.warning {
+      background: transparent;
+      border-style: dashed;
+    }
+
+    .data-role,
+    .notice-label {
+      color: var(--sub);
+      opacity: .72;
+      margin-bottom: 8px;
+    }
+
+    .notice-card.danger {
+      border-color: rgba(155,49,68,.18);
+      background: rgba(155,49,68,.035);
+    }
+
+    .notice-card.danger .notice-label,
+    .notice-card.danger .notice-title { color: var(--danger); }
+
+    .data-meta {
+      margin-top: 10px;
+      border-top: 1px solid var(--line);
+      padding-top: 10px;
+      color: var(--sub);
+      font-size: 11px;
+      line-height: 1.65;
+    }
+
+    .processing-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--sub);
+      line-height: 1;
+      margin-top: 12px;
+    }
+
+    .processing-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--deep);
+      opacity: .62;
+      animation: vamrss-processing-dot 1.1s ease-in-out infinite;
+    }
+
+    @keyframes vamrss-processing-dot {
+      0%, 100% { opacity: .24; transform: scale(.86); }
+      50% { opacity: .84; transform: scale(1); }
+    }
+
+    .bottom-nav {
       position: fixed;
       left: 50%;
       bottom: max(10px, env(safe-area-inset-bottom));
       transform: translateX(-50%);
       width: min(430px, calc(100% - 24px));
       height: 58px;
-      border: 1px solid var(--line);
+      border: none;
       border-radius: 999px;
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(16px);
-      box-shadow: 0 12px 42px rgba(15,30,48,0.12);
+      background: rgba(255,255,255,0.36);
+      backdrop-filter: blur(18px) saturate(1.08);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+      box-shadow: 0 14px 30px rgba(15,30,48,0.10);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 5px;
@@ -416,133 +688,241 @@
       z-index: 10;
     }
 
-    .nav-button, .vam-nav-button {
+    .nav-button {
       border: 0;
       background: transparent;
-      color: var(--sub);
+      color: rgba(16,23,34,0.58);
       min-height: 46px;
       border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      font-weight: 800;
     }
-    .nav-button.active, .vam-nav-button-active { background: #edf3f8; color: var(--ink); }
+
+    .nav-button.active {
+      background: rgba(235,240,244,0.88);
+      color: var(--ink);
+    }
+
+    .dialog-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background: rgba(16,23,34,0.18);
+      display: none;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .dialog-backdrop.active { display: grid; }
+
+    .dialog-card {
+      width: min(360px, 100%);
+      border-radius: 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 60px rgba(15,30,48,0.14);
+      padding: 18px;
+    }
+
+    .dialog-kicker {
+      margin: 0 0 8px;
+      color: var(--sub);
+      opacity: .72;
+    }
+
+    .dialog-title {
+      font-size: 28px;
+      line-height: .98;
+      letter-spacing: -0.06em;
+    }
+
+    .dialog-text { margin: 12px 0 0; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(var(--nav-height) + max(20px, env(safe-area-inset-bottom)));
+      transform: translateX(-50%) translateY(10px);
+      max-width: min(430px, calc(100% - 24px));
+      width: max-content;
+      opacity: 0;
+      pointer-events: none;
+      border: none;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.36);
+      backdrop-filter: blur(18px) saturate(1.08);
+      -webkit-backdrop-filter: blur(18px) saturate(1.08);
+      box-shadow: 0 14px 30px rgba(15,30,48,0.10);
+      color: var(--ink);
+      padding: 12px 16px;
+      font-size: 12px;
+      line-height: 1;
+      z-index: 60;
+      transition: opacity var(--motion-base) var(--motion-ease), transform var(--motion-base) var(--motion-ease);
+    }
+
+    .toast.active {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .site-footer {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 4px 2px 0;
+      color: var(--sub);
+      opacity: .58;
+    }
+
+    button,
+    .chip,
+    .nav-button {
+      transition: background-color var(--motion-fast) var(--motion-ease), color var(--motion-fast) var(--motion-ease), border-color var(--motion-fast) var(--motion-ease), opacity var(--motion-fast) var(--motion-ease);
+    }
+
+    @media (max-width: 420px) {
+      .dialog-actions { grid-template-columns: 1fr; }
+      .price-grid { grid-template-columns: 1fr; }
+    }
 
     @media (min-width: 640px) {
-      .container, .vam-container { padding-top: 28px; }
-      .hero, .vam-hero { grid-template-columns: 1.1fr 0.9fr; min-height: 245px; align-items: end; }
+      .container { padding-top: 28px; }
+      .hero {
+        grid-template-columns: 1.1fr 0.9fr;
+        min-height: 245px;
+        align-items: end;
+      }
       .form-grid { grid-template-columns: repeat(2, 1fr); }
       .form-grid .wide { grid-column: 1 / -1; }
       .button-row { grid-template-columns: 1fr auto; }
       .toolbar-row { grid-template-columns: 1fr auto; }
+      .data-grid, .notice-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+        scroll-behavior: auto !important;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="container vam-container">
+  <main class="container">
     <section id="vaultScreen" class="screen active">
-      <div class="page vam-page">
-        <div class="topbar vam-topbar">
-          <div class="brand vam-brand">＊ (VAMRSS) WSV</div>
-          <div class="top-title vam-top-title">WORKS VAULT</div>
-          <button class="top-action vam-top-action" type="button" onclick="showScreen('data')">DATA</button>
+      <div class="page">
+        <div class="topbar">
+          <div class="brand">＊ (VAMRSS) WSV</div>
+          <div class="top-title">WORKS VAULT</div>
+          <button class="top-action" type="button" onclick="showScreen('data')">DATA</button>
         </div>
 
-        <header class="hero vam-hero">
+        <header class="hero">
           <div class="hero-main">
-            <div class="kicker vam-kicker">Private artwork worksheet archive</div>
-            <h1 class="vam-title">Worksheet<br>Vault<span class="jp-note vam-note">作品台帳</span></h1>
+            <div class="kicker">Private artwork worksheet archive</div>
+            <h1>Worksheet<br>Vault<span class="jp-note">作品台帳</span></h1>
           </div>
-          <p class="lead vam-lead">Record, organize, and preserve artwork data in a quiet private archive.<br>作品情報・寸法・技法・保管場所・展示履歴を記録し、JSONで保管できます。</p>
+          <p class="lead">Record, organize, and preserve artwork data in a quiet private archive.<br>作品情報・寸法・技法・保管場所・展示履歴を記録し、JSONで保管できます。</p>
         </header>
 
-        <div class="accent-rule vam-rule"></div>
+        <div class="solid-rule"></div>
 
-        <section class="section status-section vam-section vam-section-emphasis">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Overview</div>
-            <h2 class="vam-section-title">Works Summary<span class="jp-note vam-note">作品数</span></h2>
+        <section class="section emphasis-section">
+          <div class="section-head">
+            <div class="section-number">Overview</div>
+            <h2>Works Summary<span class="jp-note">作品数</span></h2>
           </div>
           <div class="overview-grid">
-            <div class="stat vam-stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
-            <div class="stat-row vam-stat-row"><span>In Progress / 進行中</span><strong id="productionWorks">0</strong></div>
-            <div class="stat-row vam-stat-row"><span>Stored / 保管中</span><strong id="storedWorks">0</strong></div>
+            <div class="stat"><span>Registered / 登録作品数</span><strong id="totalWorks">0</strong></div>
+            <div class="stat-row"><span>In Progress / 制作中</span><strong id="productionWorks">0</strong></div>
+            <div class="stat-row"><span>Stored / 保管中</span><strong id="storedWorks">0</strong></div>
           </div>
         </section>
 
-        <section class="section vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Index</div>
-            <h2 class="vam-section-title">Search Vault<span class="jp-note vam-note">検索</span></h2>
+        <section class="section">
+          <div class="section-head">
+            <div class="section-number">Index</div>
+            <h2>Search Vault<span class="jp-note">検索</span></h2>
           </div>
           <div class="toolbar">
             <div class="toolbar-row">
-              <input id="searchInput" type="search" placeholder="">
-              <button class="secondary vam-button-secondary" type="button" onclick="showScreen('entry')">+ Add Work</button>
+              <input id="searchInput" type="search" placeholder="" aria-label="作品レコードを検索">
+              <button class="secondary" type="button" onclick="showScreen('entry')">+ Add Work</button>
             </div>
-            <div class="chips" id="statusChips"></div>
+            <div class="chips" id="statusChips" aria-label="管理状態で絞り込み"></div>
           </div>
           <div id="workList"></div>
         </section>
+
+        <footer class="site-footer">(VAMRSS) WORKSHEET VAULT SYSTEM / © 2026 VAMRSS</footer>
       </div>
     </section>
 
     <section id="entryScreen" class="screen">
-      <div class="page vam-page">
-        <div class="topbar vam-topbar">
-          <div class="brand vam-brand">＊ NEW RECORD</div>
-          <div class="top-title vam-top-title">WORKSHEET</div>
-          <button class="top-action vam-top-action" type="button" onclick="showScreen('vault')">BACK</button>
+      <div class="page">
+        <div class="topbar">
+          <div class="brand">＊ NEW RECORD</div>
+          <div class="top-title">WORKSHEET</div>
+          <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
-        <header class="hero vam-hero">
+        <header class="hero">
           <div class="hero-main">
-            <div class="kicker vam-kicker">Create or edit one worksheet record</div>
-            <h1 id="entryHeroTitle" class="vam-title">New<br>Work<span class="jp-note vam-note">作品登録</span></h1>
+            <div class="kicker">Create or edit one worksheet record</div>
+            <h1 id="entryHeroTitle">New<br>Work<span class="jp-note">作品登録</span></h1>
           </div>
-          <p class="lead vam-lead">This prototype stores records in this browser. Export the vault regularly as a JSON backup.<br>このプロトタイプはブラウザ内に保存します。定期的にJSONを書き出してください。</p>
+          <p class="lead">This prototype stores records in this browser. Export the vault regularly as a JSON backup.<br>このプロトタイプはブラウザ内に保存します。定期的にJSONを書き出してください。</p>
         </header>
 
-        <div class="accent-rule vam-rule"></div>
+        <div class="solid-rule"></div>
 
-        <section class="section vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Entry</div>
-            <h2 id="formTitle" class="vam-section-title">Work Record<span class="jp-note vam-note">作品情報</span></h2>
+        <section class="section">
+          <div class="section-head">
+            <div class="section-number">Entry</div>
+            <h2 id="formTitle">Work Record<span class="jp-note">作品情報</span></h2>
           </div>
           <form id="workForm">
             <div class="form-grid">
-              <div class="field wide vam-field"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="" required></div>
-              <div class="field vam-field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder=""></div>
-              <div class="field vam-field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
-              <div class="field wide vam-field"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder=""></div>
-              <div class="field wide vam-field"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder=""></div>
-              <div class="field wide vam-field">
+              <div class="field wide"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="" required></div>
+              <div class="field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder=""></div>
+              <div class="field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
+              <div class="field wide"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder=""></div>
+              <div class="field wide"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder=""></div>
+              <div class="field wide">
                 <label>Dimensions / サイズ mm</label>
                 <div class="dimension-grid">
-                  <div><div class="mini-label">W</div><input id="sizeW" type="number" inputmode="numeric" min="0" placeholder=""></div>
-                  <div><div class="mini-label">H</div><input id="sizeH" type="number" inputmode="numeric" min="0" placeholder=""></div>
-                  <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder=""></div>
+                  <div><div class="mini-label">W</div><input id="sizeW" type="number" inputmode="numeric" min="0" placeholder="" aria-label="幅 mm"></div>
+                  <div><div class="mini-label">H</div><input id="sizeH" type="number" inputmode="numeric" min="0" placeholder="" aria-label="高さ mm"></div>
+                  <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder="" aria-label="奥行 mm"></div>
                 </div>
               </div>
-              <div class="field wide vam-field">
+              <div class="field wide">
                 <label>Ledger / 価格記録</label>
                 <div class="price-grid">
                   <div>
                     <div class="mini-label">販売価格</div>
-                    <input id="price" type="number" inputmode="numeric" min="0" placeholder="">
+                    <input id="price" type="number" inputmode="numeric" min="0" placeholder="" aria-label="販売価格">
                     <label class="ask-check" for="priceAsk"><input id="priceAsk" type="checkbox"> ASK</label>
                   </div>
-                  <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder=""></div>
+                  <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder="" aria-label="原価"></div>
                 </div>
               </div>
-              <div class="field vam-field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
-              <div class="field vam-field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
-              <div class="field vam-field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
-              <div class="field vam-field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder=""></div>
-              <div class="field wide vam-field"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder=""></textarea></div>
-              <div class="field wide vam-field"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder=""></textarea></div>
+              <div class="field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
+              <div class="field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
+              <div class="field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
+              <div class="field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder=""></div>
+              <div class="field wide"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder=""></textarea></div>
+              <div class="field wide"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder=""></textarea></div>
             </div>
             <div class="button-row">
-              <button class="primary vam-button-primary" type="submit" id="submitButton">Save Record</button>
-              <button class="secondary vam-button-secondary" type="button" id="cancelButton" style="display:none;">Cancel Edit</button>
+              <button class="primary" type="submit" id="submitButton">Save Record</button>
+              <button class="secondary" type="button" id="cancelButton" style="display:none;">Cancel Edit</button>
             </div>
           </form>
         </section>
@@ -550,88 +930,121 @@
     </section>
 
     <section id="dataScreen" class="screen">
-      <div class="page vam-page">
-        <div class="topbar vam-topbar">
-          <div class="brand vam-brand">＊ DATA ROOM</div>
-          <div class="top-title vam-top-title">IMPORT / EXPORT</div>
-          <button class="top-action vam-top-action" type="button" onclick="showScreen('vault')">BACK</button>
+      <div class="page">
+        <div class="topbar">
+          <div class="brand">＊ DATA ROOM</div>
+          <div class="top-title">IMPORT / EXPORT</div>
+          <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
-        <header class="hero vam-hero">
+        <header class="hero">
           <div class="hero-main">
-            <div class="kicker vam-kicker">JSON backup and restore</div>
-            <h1 class="vam-title">Data<br>Room<span class="jp-note vam-note">保管庫管理</span></h1>
+            <div class="kicker">JSON backup and restore</div>
+            <h1>Data<br>Room<span class="jp-note">保管庫管理</span></h1>
           </div>
-          <p class="lead vam-lead">Export all records as a JSON file. Import will replace the current vault after confirmation.<br>全作品データをJSONで保存できます。インポートは確認後、現在のデータを置き換えます。</p>
+          <p class="lead">Export all records as a JSON file. Import will replace the current vault after confirmation.<br>全作品データをJSONで保存できます。インポートは確認後、現在のデータを置き換えます。</p>
         </header>
 
-        <div class="accent-rule vam-rule"></div>
+        <div class="solid-rule"></div>
 
-        <section class="section vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Export</div>
-            <h2 class="vam-section-title">Export Vault<span class="jp-note vam-note">書き出し</span></h2>
+        <section class="section">
+          <div class="section-head">
+            <div class="section-number">Backup</div>
+            <h2>Data Control<span class="jp-note">保存と復元</span></h2>
           </div>
-          <p class="hint">現在の作品データを <strong>wsv-backup-日付.json</strong> として保存します。</p>
-          <button class="primary vam-button-primary" type="button" id="exportButton" style="width:100%;">Export Vault</button>
+          <div class="data-grid">
+            <article class="data-card">
+              <div class="data-role">Export</div>
+              <p class="data-title">Export Vault</p>
+              <p class="data-text">現在の作品データをJSONとして保存します。ファイル名は <strong>VAMRYYYYMMDD-HHMM.json</strong> 形式です。</p>
+              <div class="data-meta" id="exportMeta">Last export / 未実行</div>
+              <div class="data-actions"><button class="primary" type="button" id="exportButton">Export Vault</button></div>
+            </article>
+            <article class="data-card caution">
+              <div class="data-role">Import</div>
+              <p class="data-title">Import Vault</p>
+              <p class="data-text">エクスポートしたJSONを読み込みます。現在のデータは確認後に上書きされます。</p>
+              <div class="field file-input-wrap"><label for="importFile">JSON File / バックアップファイル</label><input id="importFile" type="file" accept="application/json,.json"></div>
+            </article>
+          </div>
         </section>
 
-        <section class="section vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Import</div>
-            <h2 class="vam-section-title">Import Vault<span class="jp-note vam-note">読み込み</span></h2>
-          </div>
-          <p class="hint">エクスポートしたJSONを読み込みます。現在のデータは上書きされます。</p>
-          <div class="field file-input-wrap vam-field"><label for="importFile">JSON File / バックアップファイル</label><input id="importFile" type="file" accept="application/json,.json"></div>
-        </section>
-
-        <section class="section section-soft vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Options</div>
-            <h2 class="vam-section-title">Vault Options<span class="jp-note vam-note">選択項目</span></h2>
+        <section class="section section-soft">
+          <div class="section-head">
+            <div class="section-number">Options</div>
+            <h2>Vault Options<span class="jp-note">選択項目</span></h2>
           </div>
           <div class="setting-list">
             <div class="setting-group">
               <p class="setting-title">Technique / 技法</p>
               <div class="setting-form">
-                <input id="techniqueOptionInput" type="text" placeholder="">
-                <button class="secondary vam-button-secondary" type="button" id="addTechniqueButton">Add</button>
+                <input id="techniqueOptionInput" type="text" placeholder="" aria-label="技法を追加">
+                <button class="secondary" type="button" id="addTechniqueButton">Add</button>
               </div>
               <div id="techniqueOptionList"></div>
             </div>
             <div class="setting-group">
               <p class="setting-title">Location / 保管場所</p>
               <div class="setting-form">
-                <input id="locationOptionInput" type="text" placeholder="">
-                <button class="secondary vam-button-secondary" type="button" id="addLocationButton">Add</button>
+                <input id="locationOptionInput" type="text" placeholder="" aria-label="保管場所を追加">
+                <button class="secondary" type="button" id="addLocationButton">Add</button>
               </div>
               <div id="locationOptionList"></div>
             </div>
           </div>
         </section>
 
-        <section class="section vam-section">
-          <div class="section-head vam-section-head">
-            <div class="section-number vam-section-code">Danger</div>
-            <h2 class="vam-section-title">Reset Prototype<span class="jp-note vam-note">初期化</span></h2>
+        <section class="section">
+          <div class="section-head">
+            <div class="section-number">Danger</div>
+            <h2>Reset Prototype<span class="jp-note">初期化</span></h2>
           </div>
-          <p class="hint">ブラウザ内のWSVプロトタイプデータを削除します。必要な場合は先にエクスポートしてください。</p>
-          <button class="danger vam-button-danger" type="button" id="resetButton" style="width:100%;">Delete All Records</button>
+          <div class="notice-grid">
+            <article class="notice-card warning">
+              <div class="notice-label">Caution</div>
+              <p class="notice-title">削除前にExportしてください</p>
+              <p class="notice-text">ブラウザ内のWSVプロトタイプデータを削除します。必要な場合は先にJSONを書き出してください。</p>
+            </article>
+            <article class="notice-card danger">
+              <div class="notice-label">Danger</div>
+              <p class="notice-title">Delete All Records</p>
+              <p class="notice-text">この操作は元に戻せません。確認ダイアログの後、すべてのレコードを削除します。</p>
+              <div class="data-actions"><button class="danger" type="button" id="resetButton">Delete All Records</button></div>
+            </article>
+          </div>
         </section>
       </div>
     </section>
   </main>
 
-  <nav class="bottom-nav vam-bottom-nav">
-    <button class="nav-button active vam-nav-button vam-nav-button-active" type="button" id="vaultNavButton" onclick="showScreen('vault')">VAULT</button>
-    <button class="nav-button vam-nav-button" type="button" id="entryNavButton" onclick="showScreen('entry')">ENTRY</button>
-    <button class="nav-button vam-nav-button" type="button" id="dataNavButton" onclick="showScreen('data')">DATA</button>
+  <nav class="bottom-nav" aria-label="主要画面">
+    <button class="nav-button active" type="button" id="vaultNavButton" onclick="showScreen('vault')">VAULT</button>
+    <button class="nav-button" type="button" id="entryNavButton" onclick="showScreen('entry')">ENTRY</button>
+    <button class="nav-button" type="button" id="dataNavButton" onclick="showScreen('data')">DATA</button>
   </nav>
+
+  <div class="dialog-backdrop" id="dialogBackdrop" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="dialog-card">
+      <p class="dialog-kicker" id="dialogKicker">Confirm</p>
+      <h2 class="dialog-title" id="dialogTitle">Confirm</h2>
+      <p class="dialog-text" id="dialogText"></p>
+      <div class="dialog-actions">
+        <button class="secondary" type="button" id="dialogCancel">Cancel</button>
+        <button class="danger" type="button" id="dialogConfirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
     const STORAGE_KEY = "vamrss-wsv-works-v1";
     const TECHNIQUE_STORAGE_KEY = "vamrss-wsv-techniques-v1";
     const LOCATION_STORAGE_KEY = "vamrss-wsv-locations-v1";
+    const EXPORT_META_KEY = "vamrss-wsv-last-export-v1";
+    const APP_TITLE = "(VAMRSS)WORKSHEET VAULT SYSTEM";
+    const APP_ABBREVIATION = "VAMR";
+
     const DEFAULT_TECHNIQUES = ["Painting", "Sculpture", "Installation", "Drawing", "Photography", "Video", "Mixed Media"];
     const DEFAULT_LOCATIONS = ["Studio", "Storage", "Gallery", "Collector", "Archive"];
     const PRODUCTION_STATUSES = ["制作中", "完成", "制作終了"];
@@ -645,7 +1058,6 @@
       "売却済": { productionStatus: "完成", managementStatus: "売却済" },
       "売却済み": { productionStatus: "完成", managementStatus: "売却済" },
       "譲渡済": { productionStatus: "完成", managementStatus: "譲渡済" },
-      "譲渡済": { productionStatus: "完成", managementStatus: "譲渡済" },
       "手放し済み": { productionStatus: "完成", managementStatus: "譲渡済" },
       "非売": { productionStatus: "完成", managementStatus: "非売品" },
       "非売品": { productionStatus: "完成", managementStatus: "非売品" },
@@ -655,9 +1067,9 @@
       "処分済み": { productionStatus: "完成", managementStatus: "処分済" },
       "廃棄済み": { productionStatus: "完成", managementStatus: "処分済" },
       "打ち切り": { productionStatus: "制作終了", managementStatus: "保管中" },
-      "制作終了": { productionStatus: "制作終了", managementStatus: "保管中" },
       "制作終了": { productionStatus: "制作終了", managementStatus: "保管中" }
     };
+
     const yen = new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY", maximumFractionDigits: 0 });
 
     let works = [];
@@ -665,6 +1077,7 @@
     let locations = [];
     let editingId = null;
     let activeStatus = "ALL";
+    let pendingDialogAction = null;
 
     const form = document.getElementById("workForm");
     const workList = document.getElementById("workList");
@@ -674,6 +1087,7 @@
     const locationSelect = document.getElementById("location");
     const statusChips = document.getElementById("statusChips");
     const searchInput = document.getElementById("searchInput");
+    const toast = document.getElementById("toast");
 
     const fields = {
       title: document.getElementById("title"),
@@ -700,6 +1114,48 @@
     }
 
     function nowIso() { return new Date().toISOString(); }
+
+    function pad(value) { return String(value).padStart(2, "0"); }
+
+    function getBackupFileName() {
+      const d = new Date();
+      const yyyymmdd = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+      const hhmm = `${pad(d.getHours())}${pad(d.getMinutes())}`;
+      return `${APP_ABBREVIATION}${yyyymmdd}-${hhmm}.json`;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("active");
+      window.setTimeout(() => toast.classList.remove("active"), 1900);
+    }
+
+    function showDialog({ kicker = "Confirm", title = "Confirm", text = "", confirmLabel = "Confirm", confirmClass = "danger", onConfirm }) {
+      pendingDialogAction = onConfirm;
+      document.getElementById("dialogKicker").textContent = kicker;
+      document.getElementById("dialogTitle").textContent = title;
+      document.getElementById("dialogText").textContent = text;
+      const confirmButton = document.getElementById("dialogConfirm");
+      confirmButton.textContent = confirmLabel;
+      confirmButton.className = confirmClass;
+      document.getElementById("dialogBackdrop").classList.add("active");
+      document.getElementById("dialogCancel").focus();
+    }
+
+    function closeDialog() {
+      document.getElementById("dialogBackdrop").classList.remove("active");
+      pendingDialogAction = null;
+    }
+
+    document.getElementById("dialogCancel").addEventListener("click", closeDialog);
+    document.getElementById("dialogConfirm").addEventListener("click", () => {
+      const action = pendingDialogAction;
+      closeDialog();
+      if (typeof action === "function") action();
+    });
+    document.getElementById("dialogBackdrop").addEventListener("click", event => {
+      if (event.target.id === "dialogBackdrop") closeDialog();
+    });
 
     function load() {
       try {
@@ -741,7 +1197,7 @@
         sizeH: "800",
         sizeD: "100",
         price: "",
-        priceAsk: false,
+        priceAsk: true,
         cost: "",
         productionStatus: "完成",
         managementStatus: "展示中",
@@ -762,6 +1218,7 @@
       renderCatalogSelect(locationSelect, locations);
       renderOptionLists();
       renderChips();
+      renderExportMeta();
     }
 
     function renderCatalogSelect(select, items, selected = "") {
@@ -795,18 +1252,29 @@
       input.value = "";
       saveSettings();
       setupStatusOptions();
+      resetForm({ keepScreen: true });
+      showToast("項目を追加しました。");
     }
 
     window.deleteOption = function(kind, value) {
-      if (kind === "technique") techniques = techniques.filter(item => item !== value);
-      if (kind === "location") locations = locations.filter(item => item !== value);
-      saveSettings();
-      setupStatusOptions();
+      showDialog({
+        kicker: "Delete option",
+        title: "Delete Option",
+        text: `「${value}」を選択項目から削除します。既存レコードの文字列は残ります。`,
+        confirmLabel: "Delete",
+        onConfirm: () => {
+          if (kind === "technique") techniques = techniques.filter(item => item !== value);
+          if (kind === "location") locations = locations.filter(item => item !== value);
+          saveSettings();
+          setupStatusOptions();
+          showToast("項目を削除しました。");
+        }
+      });
     };
 
     function renderChips() {
       const items = ["ALL", ...MANAGEMENT_STATUSES];
-      statusChips.innerHTML = items.map(s => `<button class="chip vam-chip ${s === activeStatus ? "active vam-chip-active" : ""}" type="button" onclick="setStatusFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("");
+      statusChips.innerHTML = items.map(s => `<button class="chip ${s === activeStatus ? "active" : ""}" type="button" onclick="setStatusFilter('${escapeAttr(s)}')">${escapeHtml(s)}</button>`).join("");
     }
 
     window.setStatusFilter = function(status) {
@@ -820,12 +1288,11 @@
         document.getElementById(id + "Screen").classList.toggle("active", id === name);
         const button = document.getElementById(id + "NavButton");
         button.classList.toggle("active", id === name);
-        button.classList.toggle("vam-nav-button-active", id === name);
       });
       window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
-    function resetForm() {
+    function resetForm(options = {}) {
       editingId = null;
       form.reset();
       renderCatalogSelect(techniqueSelect, techniques);
@@ -836,10 +1303,11 @@
       fields.location.value = locations[0] || "";
       fields.priceAsk.checked = false;
       fields.price.disabled = false;
-      document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note vam-note">作品登録</span>';
-      document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note vam-note">作品情報</span>';
+      document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
+      document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
       document.getElementById("cancelButton").style.display = "none";
+      if (!options.keepScreen) render();
     }
 
     function formToWork(existing = {}) {
@@ -873,15 +1341,18 @@
     form.addEventListener("submit", event => {
       event.preventDefault();
       if (!fields.title.value.trim()) {
-        alert("作品名を入力してください。");
+        showToast("作品名を入力してください。");
+        fields.title.focus();
         return;
       }
+      const wasEditing = Boolean(editingId);
       if (editingId) works = works.map(w => w.id === editingId ? formToWork(w) : w);
       else works.push(formToWork());
       save();
       resetForm();
       render();
       showScreen("vault");
+      showToast(wasEditing ? "更新しました。" : "保存しました。");
     });
 
     document.getElementById("cancelButton").addEventListener("click", () => {
@@ -913,19 +1384,29 @@
       fields.owner.value = w.owner || "";
       fields.exhibitionHistory.value = w.exhibitionHistory || "";
       fields.memo.value = w.memo || "";
-      document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note vam-note">作品編集</span>';
-      document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note vam-note">作品情報を編集</span>';
+      document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note">作品編集</span>';
+      document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note">作品情報を編集</span>';
       document.getElementById("submitButton").textContent = "Update Record";
       document.getElementById("cancelButton").style.display = "block";
       showScreen("entry");
     };
 
     window.deleteWork = function(id) {
-      if (!confirm("この作品レコードを削除しますか？")) return;
-      works = works.filter(w => w.id !== id);
-      save();
-      if (editingId === id) resetForm();
-      render();
+      const w = works.find(item => item.id === id);
+      if (!w) return;
+      showDialog({
+        kicker: "Delete record",
+        title: "Delete Work",
+        text: `「${w.title || "Untitled"}」の作品レコードを削除します。この操作は元に戻せません。`,
+        confirmLabel: "Delete",
+        onConfirm: () => {
+          works = works.filter(item => item.id !== id);
+          save();
+          if (editingId === id) resetForm();
+          render();
+          showToast("削除しました。");
+        }
+      });
     };
 
     function normalizeDimensions(w = {}) {
@@ -981,7 +1462,7 @@
       document.getElementById("storedWorks").textContent = works.filter(w => normalizeStatuses(w).managementStatus === "保管中").length;
 
       if (!filtered.length) {
-        workList.innerHTML = '<div class="empty">No records found.<br>該当する作品レコードがありません。</div>';
+        workList.innerHTML = '<div class="empty"><p>No records found.<br>該当する作品レコードがありません。</p></div>';
         return;
       }
 
@@ -992,26 +1473,22 @@
         else if (w.price !== "" && w.price != null) priceParts.push(`Sales ${formatMoney(w.price)}`);
         if (w.cost !== "" && w.cost != null) priceParts.push(`Cost ${formatMoney(w.cost)}`);
         return `
-        <article class="work-item vam-work-card">
-          <div class="work-top">
-            <div>
-              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}</div>
-              <div class="work-title">${escapeHtml(w.title)}</div>
-              <div class="chips">
-                <div class="status-pill vam-status-pill">${escapeHtml(statuses.productionStatus)}</div>
-                <div class="status-pill vam-status-pill">${escapeHtml(statuses.managementStatus)}</div>
-              </div>
-              <div class="work-meta">
-                ${escapeHtml(w.technique || "No technique")} / ${escapeHtml(w.materials || "No materials")}<br>
-                ${escapeHtml(formatDimensions(w) || "No size")} / ${escapeHtml(w.location || "No location")}${priceParts.length ? `<br>${escapeHtml(priceParts.join(" / "))}` : ""}
-              </div>
-            </div>
+        <article class="work-item">
+          <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}</div>
+          <div class="work-title">${escapeHtml(w.title)}</div>
+          <div class="chips" style="margin-top:8px;">
+            <div class="status-pill">${escapeHtml(statuses.productionStatus)}</div>
+            <div class="status-pill">${escapeHtml(statuses.managementStatus)}</div>
           </div>
-          ${w.exhibitionHistory ? `<div class="work-meta" style="margin-top:10px;"><strong>Exhibition:</strong> ${escapeHtml(w.exhibitionHistory)}</div>` : ""}
-          ${w.memo ? `<div class="work-meta" style="margin-top:10px;">${escapeHtml(w.memo)}</div>` : ""}
+          <div class="work-meta">
+            ${escapeHtml(w.technique || "No technique")} / ${escapeHtml(w.materials || "No materials")}<br>
+            ${escapeHtml(formatDimensions(w) || "No size")} / ${escapeHtml(w.location || "No location")}${priceParts.length ? `<br>${escapeHtml(priceParts.join(" / "))}` : ""}
+          </div>
+          ${w.exhibitionHistory ? `<div class="work-meta"><strong>Exhibition:</strong> ${escapeHtml(w.exhibitionHistory)}</div>` : ""}
+          ${w.memo ? `<div class="work-meta">${escapeHtml(w.memo)}</div>` : ""}
           <div class="item-actions">
-            <button class="secondary vam-button-secondary" type="button" onclick="startEdit('${escapeAttr(w.id)}')">Edit</button>
-            <button class="danger vam-button-danger" type="button" onclick="deleteWork('${escapeAttr(w.id)}')">Delete</button>
+            <button class="secondary" type="button" onclick="startEdit('${escapeAttr(w.id)}')">Edit</button>
+            <button class="danger" type="button" onclick="deleteWork('${escapeAttr(w.id)}')">Delete</button>
           </div>
         </article>`;
       }).join("") + '</div>';
@@ -1036,23 +1513,41 @@
       addOption("location");
     });
 
+    function renderExportMeta() {
+      const last = localStorage.getItem(EXPORT_META_KEY);
+      document.getElementById("exportMeta").textContent = last ? `Last export / ${last}` : "Last export / 未実行";
+    }
+
     document.getElementById("exportButton").addEventListener("click", () => {
-      const backup = {
-        app: "(VAMRSS)WORKSHEET VAULT SYSTEM",
-        abbreviation: "WSV",
-        version: "prototype-1.0",
-        exportedAt: nowIso(),
-        works
-      };
-      const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `wsv-backup-${new Date().toISOString().slice(0,10)}.json`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+      const button = document.getElementById("exportButton");
+      button.disabled = true;
+      button.textContent = "Exporting";
+      window.setTimeout(() => {
+        const backup = {
+          app: APP_TITLE,
+          abbreviation: APP_ABBREVIATION,
+          version: "prototype-1.0",
+          exportedAt: nowIso(),
+          works,
+          techniques,
+          locations
+        };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = getBackupFileName();
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+        const exportTime = new Date().toLocaleString("ja-JP", { hour12: false });
+        localStorage.setItem(EXPORT_META_KEY, exportTime);
+        renderExportMeta();
+        button.disabled = false;
+        button.textContent = "Export Vault";
+        showToast("エクスポートしました。");
+      }, 140);
     });
 
     document.getElementById("importFile").addEventListener("change", event => {
@@ -1064,40 +1559,48 @@
           const data = JSON.parse(reader.result);
           const importedWorks = Array.isArray(data) ? data : data.works;
           if (!Array.isArray(importedWorks)) throw new Error("Invalid backup format");
-          if (!confirm(`${importedWorks.length}件の作品データで現在のVaultを上書きしますか？`)) return;
-          works = importedWorks.map(w => ({
-            id: w.id || createId(),
-            title: String(w.title || "Untitled"),
-            year: String(w.year || ""),
-            series: String(w.series || ""),
-            technique: String(w.technique || ""),
-            materials: String(w.materials || ""),
-            sizeW: normalizeDimensions(w).w,
-            sizeH: normalizeDimensions(w).h,
-            sizeD: normalizeDimensions(w).d,
-            price: String(w.price || "").toUpperCase() === "ASK" ? "" : (w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0))),
-            priceAsk: Boolean(w.priceAsk) || String(w.price || "").toUpperCase() === "ASK",
-            cost: w.cost === "" || w.cost == null ? "" : Math.max(0, Math.round(Number(w.cost) || 0)),
-            productionStatus: normalizeStatuses(w).productionStatus,
-            managementStatus: normalizeStatuses(w).managementStatus,
-            location: String(w.location || ""),
-            owner: String(w.owner || ""),
-            exhibitionHistory: String(w.exhibitionHistory || ""),
-            memo: String(w.memo || ""),
-            createdAt: w.createdAt || nowIso(),
-            updatedAt: w.updatedAt || nowIso()
-          }));
-          techniques = cleanOptions([...techniques, ...works.map(w => w.technique)], DEFAULT_TECHNIQUES);
-          locations = cleanOptions([...locations, ...works.map(w => w.location)], DEFAULT_LOCATIONS);
-          saveSettings();
-          save();
-          setupStatusOptions();
-          resetForm();
-          render();
-          showScreen("vault");
-          alert("インポートが完了しました。");
+          showDialog({
+            kicker: "Import vault",
+            title: "Replace Vault",
+            text: `${importedWorks.length}件の作品データで現在のVaultを上書きします。現在のデータが必要な場合は、先にExportしてください。`,
+            confirmLabel: "Import",
+            confirmClass: "primary",
+            onConfirm: () => {
+              works = importedWorks.map(w => ({
+                id: w.id || createId(),
+                title: String(w.title || "Untitled"),
+                year: String(w.year || ""),
+                series: String(w.series || ""),
+                technique: String(w.technique || ""),
+                materials: String(w.materials || ""),
+                sizeW: normalizeDimensions(w).w,
+                sizeH: normalizeDimensions(w).h,
+                sizeD: normalizeDimensions(w).d,
+                price: String(w.price || "").toUpperCase() === "ASK" ? "" : (w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0))),
+                priceAsk: Boolean(w.priceAsk) || String(w.price || "").toUpperCase() === "ASK",
+                cost: w.cost === "" || w.cost == null ? "" : Math.max(0, Math.round(Number(w.cost) || 0)),
+                productionStatus: normalizeStatuses(w).productionStatus,
+                managementStatus: normalizeStatuses(w).managementStatus,
+                location: String(w.location || ""),
+                owner: String(w.owner || ""),
+                exhibitionHistory: String(w.exhibitionHistory || ""),
+                memo: String(w.memo || ""),
+                createdAt: w.createdAt || nowIso(),
+                updatedAt: w.updatedAt || nowIso()
+              }));
+              techniques = cleanOptions([...(Array.isArray(data.techniques) ? data.techniques : techniques), ...works.map(w => w.technique)], DEFAULT_TECHNIQUES);
+              locations = cleanOptions([...(Array.isArray(data.locations) ? data.locations : locations), ...works.map(w => w.location)], DEFAULT_LOCATIONS);
+              saveSettings();
+              save();
+              setupStatusOptions();
+              resetForm();
+              render();
+              showScreen("vault");
+              showToast("インポートが完了しました。");
+            }
+          });
         } catch (error) {
-          alert("JSONファイルを読み込めませんでした。WSVのバックアップ形式を確認してください。");
+          showToast("JSONファイルを読み込めませんでした。");
         } finally {
           event.target.value = "";
         }
@@ -1106,13 +1609,20 @@
     });
 
     document.getElementById("resetButton").addEventListener("click", () => {
-      if (!confirm("すべての作品レコードを削除しますか？")) return;
-      if (!confirm("本当に削除しますか？この操作は元に戻せません。")) return;
-      works = [];
-      save();
-      resetForm();
-      render();
-      showScreen("vault");
+      showDialog({
+        kicker: "Reset prototype",
+        title: "Delete All",
+        text: "すべての作品レコードを削除します。この操作は元に戻せません。必要な場合は先にExportしてください。",
+        confirmLabel: "Delete All",
+        onConfirm: () => {
+          works = [];
+          save();
+          resetForm();
+          render();
+          showScreen("vault");
+          showToast("すべて削除しました。");
+        }
+      });
     });
 
     function escapeHtml(text) {

@@ -64,7 +64,7 @@
 
     .topbar {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) auto;
       align-items: center;
       gap: 8px;
       height: 44px;
@@ -72,7 +72,6 @@
     }
 
     .brand,
-    .top-title,
     .top-action,
     .section-number,
     .label,
@@ -107,25 +106,9 @@
       text-overflow: ellipsis;
     }
 
-    .top-title {
-      grid-column: 2;
-      justify-self: center;
-      align-self: center;
-      height: 36px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      line-height: 1;
-      color: var(--sub);
-      opacity: .78;
-      background: transparent;
-      border: 0;
-      box-shadow: none;
-      padding: 0;
-    }
 
     .top-action {
-      grid-column: 3;
+      grid-column: 2;
       justify-self: end;
       align-self: center;
       height: 36px;
@@ -793,34 +776,16 @@
     @media (max-width: 520px) {
       .topbar {
         grid-template-columns: minmax(0, 1fr) auto;
-        grid-template-areas:
-          "brand action"
-          "title title";
-        height: auto;
-        min-height: 68px;
-        row-gap: 6px;
+        height: 44px;
+        min-height: 44px;
       }
 
       .brand {
-        grid-area: brand;
-        grid-column: auto;
         min-width: 0;
         width: 100%;
-        justify-self: start;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-
-      .top-title {
-        grid-area: title;
-        grid-column: auto;
-        justify-self: start;
       }
 
       .top-action {
-        grid-area: action;
-        grid-column: auto;
         justify-self: end;
       }
     }
@@ -855,7 +820,6 @@
       <div class="page">
         <div class="topbar">
           <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
-          <div class="top-title">WORKSHEET VAULT</div>
           <button class="top-action" type="button" onclick="showScreen('data')">DATA</button>
         </div>
 
@@ -904,7 +868,6 @@
       <div class="page">
         <div class="topbar">
           <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
-          <div class="top-title" id="entryTopTitle">NEW WORK</div>
           <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
@@ -971,7 +934,6 @@
       <div class="page">
         <div class="topbar">
           <div class="brand">＊(VAMRSS) WORKSHEET VAULT</div>
-          <div class="top-title">DATA ROOM</div>
           <button class="top-action" type="button" onclick="showScreen('vault')">BACK</button>
         </div>
 
@@ -1346,8 +1308,6 @@
       document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note">作品登録</span>';
       document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
-      const entryTopTitle = document.getElementById("entryTopTitle");
-      if (entryTopTitle) entryTopTitle.textContent = "NEW WORK";
       document.getElementById("cancelButton").style.display = "none";
       if (!options.keepScreen) render();
     }
@@ -1429,8 +1389,6 @@
       document.getElementById("entryHeroTitle").innerHTML = 'Edit<br>Work<span class="jp-note">作品編集</span>';
       document.getElementById("formTitle").innerHTML = 'Edit Record<span class="jp-note">作品情報を編集</span>';
       document.getElementById("submitButton").textContent = "Update Record";
-      const entryTopTitle = document.getElementById("entryTopTitle");
-      if (entryTopTitle) entryTopTitle.textContent = "EDIT WORK";
       document.getElementById("cancelButton").style.display = "block";
       showScreen("entry");
     };

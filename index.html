@@ -274,6 +274,24 @@
 
     .form-grid { display: grid; gap: 12px; }
     .price-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    .ask-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      margin-top: 6px;
+      color: var(--sub);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .ask-check input {
+      width: 18px;
+      min-height: 18px;
+      padding: 0;
+      accent-color: var(--action);
+    }
     .dimension-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .dimension-grid input { text-align: center; font-variant-numeric: tabular-nums; }
 
@@ -456,7 +474,7 @@
           </div>
           <div class="toolbar">
             <div class="toolbar-row">
-              <input id="searchInput" type="search" placeholder="Search title, series, location">
+              <input id="searchInput" type="search" placeholder="">
               <button class="secondary vam-button-secondary" type="button" onclick="showScreen('entry')">+ Add Work</button>
             </div>
             <div class="chips" id="statusChips"></div>
@@ -491,33 +509,36 @@
           </div>
           <form id="workForm">
             <div class="form-grid">
-              <div class="field wide vam-field"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="例：WHO CURATED YOUR LUCK?" required></div>
-              <div class="field vam-field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder="2026"></div>
-              <div class="field vam-field"><label for="completedDate">Completed / 完成日</label><input id="completedDate" type="date"></div>
+              <div class="field wide vam-field"><label for="title">Title / 作品名</label><input id="title" type="text" placeholder="" required></div>
+              <div class="field vam-field"><label for="year">Year / 制作年</label><input id="year" type="number" inputmode="numeric" placeholder=""></div>
               <div class="field vam-field"><label for="technique">Technique / 技法</label><select id="technique"></select></div>
-              <div class="field wide vam-field"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder="Serendipity"></div>
-              <div class="field wide vam-field"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder="LED, acrylic, cable"></div>
+              <div class="field wide vam-field"><label for="series">Series / シリーズ</label><input id="series" type="text" placeholder=""></div>
+              <div class="field wide vam-field"><label for="materials">Materials / 素材</label><input id="materials" type="text" placeholder=""></div>
               <div class="field wide vam-field">
                 <label>Dimensions / サイズ mm</label>
                 <div class="dimension-grid">
-                  <div><div class="mini-label">W</div><input id="sizeW" type="number" inputmode="numeric" min="0" placeholder="1500"></div>
-                  <div><div class="mini-label">H</div><input id="sizeH" type="number" inputmode="numeric" min="0" placeholder="800"></div>
-                  <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder="100"></div>
+                  <div><div class="mini-label">W</div><input id="sizeW" type="number" inputmode="numeric" min="0" placeholder=""></div>
+                  <div><div class="mini-label">H</div><input id="sizeH" type="number" inputmode="numeric" min="0" placeholder=""></div>
+                  <div><div class="mini-label">D</div><input id="sizeD" type="number" inputmode="numeric" min="0" placeholder=""></div>
                 </div>
               </div>
               <div class="field wide vam-field">
                 <label>Ledger / 価格記録</label>
                 <div class="price-grid">
-                  <div><div class="mini-label">販売価格</div><input id="price" type="number" inputmode="numeric" min="0" placeholder="300000"></div>
-                  <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder="120000"></div>
+                  <div>
+                    <div class="mini-label">販売価格</div>
+                    <input id="price" type="number" inputmode="numeric" min="0" placeholder="">
+                    <label class="ask-check" for="priceAsk"><input id="priceAsk" type="checkbox"> ASK</label>
+                  </div>
+                  <div><div class="mini-label">原価</div><input id="cost" type="number" inputmode="numeric" min="0" placeholder=""></div>
                 </div>
               </div>
               <div class="field vam-field"><label for="productionStatus">Production / 制作状態</label><select id="productionStatus"></select></div>
               <div class="field vam-field"><label for="managementStatus">Management / 管理状態</label><select id="managementStatus"></select></div>
               <div class="field vam-field"><label for="location">Location / 保管場所</label><select id="location"></select></div>
-              <div class="field vam-field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder="Private collection"></div>
-              <div class="field wide vam-field"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder="2026 Serendipity, Daikanyama"></textarea></div>
-              <div class="field wide vam-field"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder="Notes"></textarea></div>
+              <div class="field vam-field"><label for="owner">Owner / 所蔵先</label><input id="owner" type="text" placeholder=""></div>
+              <div class="field wide vam-field"><label for="exhibitionHistory">Exhibition History / 展示履歴</label><textarea id="exhibitionHistory" placeholder=""></textarea></div>
+              <div class="field wide vam-field"><label for="memo">Memo / メモ</label><textarea id="memo" placeholder=""></textarea></div>
             </div>
             <div class="button-row">
               <button class="primary vam-button-primary" type="submit" id="submitButton">Save Record</button>
@@ -573,7 +594,7 @@
             <div class="setting-group">
               <p class="setting-title">Technique / 技法</p>
               <div class="setting-form">
-                <input id="techniqueOptionInput" type="text" placeholder="例：Painting">
+                <input id="techniqueOptionInput" type="text" placeholder="">
                 <button class="secondary vam-button-secondary" type="button" id="addTechniqueButton">Add</button>
               </div>
               <div id="techniqueOptionList"></div>
@@ -581,7 +602,7 @@
             <div class="setting-group">
               <p class="setting-title">Location / 保管場所</p>
               <div class="setting-form">
-                <input id="locationOptionInput" type="text" placeholder="例：Studio">
+                <input id="locationOptionInput" type="text" placeholder="">
                 <button class="secondary vam-button-secondary" type="button" id="addLocationButton">Add</button>
               </div>
               <div id="locationOptionList"></div>
@@ -613,23 +634,29 @@
     const LOCATION_STORAGE_KEY = "vamrss-wsv-locations-v1";
     const DEFAULT_TECHNIQUES = ["Painting", "Sculpture", "Installation", "Drawing", "Photography", "Video", "Mixed Media"];
     const DEFAULT_LOCATIONS = ["Studio", "Storage", "Gallery", "Collector", "Archive"];
-    const PRODUCTION_STATUSES = ["制作中", "完成", "打ち切り"];
-    const MANAGEMENT_STATUSES = ["展示中", "販売中", "売却済み", "非売品", "保管中", "貸出中", "手放し済み", "処分済み"];
+    const PRODUCTION_STATUSES = ["制作中", "完成", "制作終了"];
+    const MANAGEMENT_STATUSES = ["展示中", "販売中", "売却済", "譲渡済", "非売品", "保管中", "貸出中", "処分済"];
     const LEGACY_STATUS_MAP = {
       "制作中": { productionStatus: "制作中", managementStatus: "保管中" },
       "完成": { productionStatus: "完成", managementStatus: "保管中" },
       "展示中": { productionStatus: "完成", managementStatus: "展示中" },
       "販売中": { productionStatus: "完成", managementStatus: "販売中" },
-      "売約済": { productionStatus: "完成", managementStatus: "売却済み" },
-      "売却済み": { productionStatus: "完成", managementStatus: "売却済み" },
+      "売約済": { productionStatus: "完成", managementStatus: "売却済" },
+      "売却済": { productionStatus: "完成", managementStatus: "売却済" },
+      "売却済み": { productionStatus: "完成", managementStatus: "売却済" },
+      "譲渡済": { productionStatus: "完成", managementStatus: "譲渡済" },
+      "譲渡済": { productionStatus: "完成", managementStatus: "譲渡済" },
+      "手放し済み": { productionStatus: "完成", managementStatus: "譲渡済" },
       "非売": { productionStatus: "完成", managementStatus: "非売品" },
       "非売品": { productionStatus: "完成", managementStatus: "非売品" },
       "保管中": { productionStatus: "完成", managementStatus: "保管中" },
       "貸出中": { productionStatus: "完成", managementStatus: "貸出中" },
-      "手放し済み": { productionStatus: "完成", managementStatus: "手放し済み" },
-      "処分済み": { productionStatus: "完成", managementStatus: "処分済み" },
-      "廃棄済み": { productionStatus: "完成", managementStatus: "処分済み" },
-      "打ち切り": { productionStatus: "打ち切り", managementStatus: "保管中" }
+      "処分済": { productionStatus: "完成", managementStatus: "処分済" },
+      "処分済み": { productionStatus: "完成", managementStatus: "処分済" },
+      "廃棄済み": { productionStatus: "完成", managementStatus: "処分済" },
+      "打ち切り": { productionStatus: "制作終了", managementStatus: "保管中" },
+      "制作終了": { productionStatus: "制作終了", managementStatus: "保管中" },
+      "制作終了": { productionStatus: "制作終了", managementStatus: "保管中" }
     };
     const yen = new Intl.NumberFormat("ja-JP", { style: "currency", currency: "JPY", maximumFractionDigits: 0 });
 
@@ -651,7 +678,6 @@
     const fields = {
       title: document.getElementById("title"),
       year: document.getElementById("year"),
-      completedDate: document.getElementById("completedDate"),
       series: document.getElementById("series"),
       materials: document.getElementById("materials"),
       technique: document.getElementById("technique"),
@@ -659,6 +685,7 @@
       sizeH: document.getElementById("sizeH"),
       sizeD: document.getElementById("sizeD"),
       price: document.getElementById("price"),
+      priceAsk: document.getElementById("priceAsk"),
       cost: document.getElementById("cost"),
       productionStatus: document.getElementById("productionStatus"),
       managementStatus: document.getElementById("managementStatus"),
@@ -707,7 +734,6 @@
         id: createId(),
         title: "WHO CURATED YOUR LUCK?",
         year: "2026",
-        completedDate: "2026-04-28",
         series: "Serendipity",
         technique: "Installation",
         materials: "LED, acrylic, cable, base system",
@@ -715,6 +741,7 @@
         sizeH: "800",
         sizeD: "100",
         price: "",
+        priceAsk: false,
         cost: "",
         productionStatus: "完成",
         managementStatus: "展示中",
@@ -804,9 +831,11 @@
       renderCatalogSelect(techniqueSelect, techniques);
       renderCatalogSelect(locationSelect, locations);
       fields.technique.value = techniques[0] || "";
-      fields.productionStatus.value = "完成";
+      fields.productionStatus.value = "制作中";
       fields.managementStatus.value = "保管中";
       fields.location.value = locations[0] || "";
+      fields.priceAsk.checked = false;
+      fields.price.disabled = false;
       document.getElementById("entryHeroTitle").innerHTML = 'New<br>Work<span class="jp-note vam-note">作品登録</span>';
       document.getElementById("formTitle").innerHTML = 'Work Record<span class="jp-note vam-note">作品情報</span>';
       document.getElementById("submitButton").textContent = "Save Record";
@@ -821,7 +850,6 @@
         id: existing.id || createId(),
         title: fields.title.value.trim(),
         year: fields.year.value.trim(),
-        completedDate: fields.completedDate.value,
         series: fields.series.value.trim(),
         technique: fields.technique.value,
         materials: fields.materials.value.trim(),
@@ -829,6 +857,7 @@
         sizeH: fields.sizeH.value.trim(),
         sizeD: fields.sizeD.value.trim(),
         price,
+        priceAsk: fields.priceAsk.checked,
         cost,
         productionStatus: fields.productionStatus.value,
         managementStatus: fields.managementStatus.value,
@@ -866,7 +895,6 @@
       editingId = id;
       fields.title.value = w.title || "";
       fields.year.value = w.year || "";
-      fields.completedDate.value = w.completedDate || "";
       fields.series.value = w.series || "";
       renderCatalogSelect(techniqueSelect, techniques, w.technique || "");
       fields.materials.value = w.materials || "";
@@ -874,7 +902,9 @@
       fields.sizeW.value = dims.w;
       fields.sizeH.value = dims.h;
       fields.sizeD.value = dims.d;
-      fields.price.value = w.price || "";
+      fields.priceAsk.checked = Boolean(w.priceAsk) || String(w.price || "").toUpperCase() === "ASK";
+      fields.price.value = fields.priceAsk.checked ? "" : (w.price || "");
+      fields.price.disabled = fields.priceAsk.checked;
       fields.cost.value = w.cost || "";
       const statuses = normalizeStatuses(w);
       fields.productionStatus.value = statuses.productionStatus;
@@ -922,7 +952,13 @@
       return parts.length ? `${parts.join(" × ")} mm` : String(w.size || "");
     }
 
-    function formatMoney(value) { return value === "" || value == null ? "" : yen.format(Number(value) || 0); }
+    function formatMoney(value) {
+      if (value === "" || value == null) return "";
+      const text = String(value).trim();
+      if (!text) return "";
+      const numeric = Number(text);
+      return Number.isFinite(numeric) ? yen.format(numeric) : text;
+    }
 
     function render() {
       renderChips();
@@ -935,7 +971,7 @@
         .filter(w => {
           if (!query) return true;
           const statuses = normalizeStatuses(w);
-          return [w.title, w.year, w.completedDate, w.series, w.technique, w.materials, formatDimensions(w), w.price, w.cost, statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
+          return [w.title, w.year, w.series, w.technique, w.materials, formatDimensions(w), w.price, w.priceAsk ? "ASK" : "", w.cost, statuses.productionStatus, statuses.managementStatus, w.location, w.owner, w.exhibitionHistory, w.memo]
             .some(v => String(v || "").toLowerCase().includes(query));
         })
         .sort((a, b) => String(b.updatedAt || "").localeCompare(String(a.updatedAt || "")));
@@ -952,13 +988,14 @@
       workList.innerHTML = '<div class="work-list">' + filtered.map(w => {
         const statuses = normalizeStatuses(w);
         const priceParts = [];
-        if (w.price !== "" && w.price != null) priceParts.push(`Sales ${formatMoney(w.price)}`);
+        if (w.priceAsk) priceParts.push("Sales ASK");
+        else if (w.price !== "" && w.price != null) priceParts.push(`Sales ${formatMoney(w.price)}`);
         if (w.cost !== "" && w.cost != null) priceParts.push(`Cost ${formatMoney(w.cost)}`);
         return `
         <article class="work-item vam-work-card">
           <div class="work-top">
             <div>
-              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}${w.completedDate ? ` / COMPLETED ${escapeHtml(w.completedDate)}` : ""}</div>
+              <div class="work-date">${escapeHtml(w.year || "YEAR UNKNOWN")} / ${escapeHtml(w.series || "NO SERIES")}</div>
               <div class="work-title">${escapeHtml(w.title)}</div>
               <div class="chips">
                 <div class="status-pill vam-status-pill">${escapeHtml(statuses.productionStatus)}</div>
@@ -979,6 +1016,11 @@
         </article>`;
       }).join("") + '</div>';
     }
+
+    fields.priceAsk.addEventListener("change", () => {
+      fields.price.disabled = fields.priceAsk.checked;
+      if (fields.priceAsk.checked) fields.price.value = "";
+    });
 
     searchInput.addEventListener("input", render);
     document.getElementById("addTechniqueButton").addEventListener("click", () => addOption("technique"));
@@ -1027,14 +1069,14 @@
             id: w.id || createId(),
             title: String(w.title || "Untitled"),
             year: String(w.year || ""),
-            completedDate: String(w.completedDate || ""),
             series: String(w.series || ""),
             technique: String(w.technique || ""),
             materials: String(w.materials || ""),
             sizeW: normalizeDimensions(w).w,
             sizeH: normalizeDimensions(w).h,
             sizeD: normalizeDimensions(w).d,
-            price: w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0)),
+            price: String(w.price || "").toUpperCase() === "ASK" ? "" : (w.price === "" || w.price == null ? "" : Math.max(0, Math.round(Number(w.price) || 0))),
+            priceAsk: Boolean(w.priceAsk) || String(w.price || "").toUpperCase() === "ASK",
             cost: w.cost === "" || w.cost == null ? "" : Math.max(0, Math.round(Number(w.cost) || 0)),
             productionStatus: normalizeStatuses(w).productionStatus,
             managementStatus: normalizeStatuses(w).managementStatus,
